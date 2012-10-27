@@ -1,0 +1,11 @@
+*.zip
+/plugin.xml
+*.log
+target
+target-eclipse
+.settings
+web-app/META-INF
+web-app/WEB-INF
+web-app/zipFiles
+/docs
+

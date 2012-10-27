@@ -1,0 +1,55 @@
+/* PHOTOS */
+img.photo_big {
+  width: 12em;
+  height: 14em;
+}
+img.photo {
+  width: 6.5em;
+  height: 7.5em;
+}
+img.photo_small {
+  width: 4em;
+  height: 5em;
+}
+
+img.photo_tiny {
+  width: 2em;
+  height: 2.5em;
+}
+
+ul.vote-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  //width: 800px;
+  height: auto;
+  //position: relative;
+  //z-index: 10;
+}
+
+ul.vote-list li {
+  //display:inline;
+  width: 220px;
+  height: auto;
+  float: left;
+  border: 1px solid #999;
+  margin: 0 15px 15px 0;
+  padding: 5px;
+}
+
+div.student-card {
+  margin: 2px;
+  //border: 1px solid #0000ff;
+}
+
+div.student-name {
+  text-align: center;
+  //font-weight: bold;
+  width: 200px;
+  height: 60px;
+  margin: 2px;
+}
+
+div.student-photo {
+	text-align: center;
+}

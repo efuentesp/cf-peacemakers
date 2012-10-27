@@ -1,0 +1,38 @@
+package com.peacemakers.service
+
+import com.peacemakers.domain.GroupMember;
+import com.peacemakers.domain.SociometricTest;
+import com.peacemakers.domain.SociometricTestResult;
+import com.peacemakers.domain.SurveyAnswer;
+import com.peacemakers.domain.SurveyAssigned;
+
+class SociometricTestGroupMemberService {
+
+    def isSociometricTestTaken(SociometricTest sociometricTest, GroupMember groupMember) {
+		
+		def sociometricTestId = sociometricTest.id
+		def groupMemberId = groupMember.id
+		
+		def query = SociometricTestResult.where {
+			fromGroupMember.id == groupMemberId && sociometricTest.id == sociometricTestId 
+		}
+		
+		def result = query.list()
+		
+		return (result) ? true : false
+    }
+	
+	def isSurveyTaken(SurveyAssigned surveyAssigned, GroupMember groupMember) {
+		
+		def groupMemberBean = groupMember
+		
+		def query = SurveyAnswer.where {
+			surveyApplied == surveyAssigned && groupMember == groupMemberBean
+		}
+		
+		def result = query.list()
+		
+		return (result) ? true : false
+		
+	}
+}
