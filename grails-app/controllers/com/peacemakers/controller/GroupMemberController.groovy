@@ -400,11 +400,12 @@ class GroupMemberController {
 			return
 		}
 		
-		def user = User.get(groupMember.id)
+		def user = groupMember.user
+		def userRole = UserRole.findByUser(user)
 
+		// Try to delete Group Member
 		try {
 			groupMember.delete(flush: true)
-			// TODO: Delete orphan users
 			flash.message = message(code: 'default.deleted.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
 			redirect(action: "list", id:groupMember?.socialGroup.id)
 		}
@@ -412,14 +413,38 @@ class GroupMemberController {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
 			redirect(action: "delete", id: params.id)
 		}
+		
+		// Try to delete User-Role relationship
+		try {
+			userRole.delete(flush: true)
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'userRole.label', default: 'User-Role'), params.id])
+		}
+		catch (DataIntegrityViolationException e) {
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'userRole.label', default: 'User-Role'), params.id])
+		}
+		
+		// Try to delete User
+		try {
+			user.delete(flush: true)
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
+		}
+		catch (DataIntegrityViolationException e) {
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
+		}
 	}
 	
 	def bulkDelete() {
 		println "bulkDelete: ${params}"
 		
 		params.delete.each { memberId ->
-			println memberId
+			//println memberId
+			
 			def groupMember = GroupMember.get(memberId)
+			
+			def user = groupMember.user
+			def userRole = UserRole.findByUser(user)
+						
+			// try to delete Group Member
 			try {
 				groupMember.delete(flush: true)
 				// TODO: Delete orphan users
@@ -430,6 +455,25 @@ class GroupMemberController {
 				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
 				//redirect(action: "list", id: params.socialGroup)
 			}
+			
+			// Try to delete User-Role relationship
+			try {
+				userRole.delete(flush: true)
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'userRole.label', default: 'User-Role'), params.id])
+			}
+			catch (DataIntegrityViolationException e) {
+				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'userRole.label', default: 'User-Role'), params.id])
+			}
+			
+			// Try to delete User
+			try {
+				user.delete(flush: true)
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
+			}
+			catch (DataIntegrityViolationException e) {
+				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
+			}
+			
 		}
 		redirect(action: "list", id: params.socialGroup)
 	}
