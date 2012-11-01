@@ -50,6 +50,6 @@ class SurveyAssignedController {
 			surveyAssigned.addToAnswers(groupMember: groupMember, question: surveyQuestion, choiceSelected: surveyAnswerChoice, dateAnswered: new Date()).save(failOnError: true)
 		}
 		
-		redirect(controller: "student", action: "index")
+		redirect(controller: "student", action: "main")
 	}
 }

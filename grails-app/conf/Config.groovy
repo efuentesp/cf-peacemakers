@@ -63,6 +63,7 @@ grails.hibernate.cache.queries = true
 environments {
     development {
         grails.logging.jul.usebridge = true
+		//java.io.tmpdir = /tmp/myapp-prod.tmp
     }
     production {
         grails.logging.jul.usebridge = false
@@ -96,3 +97,4 @@ log4j = {
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.peacemakers.security.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.peacemakers.security.UserRole'
 grails.plugins.springsecurity.authority.className = 'com.peacemakers.security.Role'
+

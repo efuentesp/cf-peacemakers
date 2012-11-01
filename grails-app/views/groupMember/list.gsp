@@ -24,11 +24,15 @@
 				</h1>
 			</div> <!-- page-header -->
 
-			<!-- Action Bar -->
-			<g:render template="action"/>
-			    	
-			<!-- Table -->
-			<g:render template="table"/>
+			<g:form action="bulkDelete" method="post">
+				<g:hiddenField name="socialGroup" value="${socialGroupSelected.id}" />
+			
+				<!-- Action Bar -->
+				<g:render template="action"/>
+				    	
+				<!-- Table -->
+				<g:render template="table"/>
+			</g:form>
 		
 			<!-- Pagination --> 
 			<g:render template="pagination"/>

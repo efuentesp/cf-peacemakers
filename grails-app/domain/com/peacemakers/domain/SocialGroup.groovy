@@ -41,6 +41,7 @@ class SocialGroup {
 	Address address
 	Geography geo
 	List groupMembers
+	String lang = 'es'
 	
     static constraints = {
 		name (blank: false)

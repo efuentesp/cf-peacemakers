@@ -1,6 +1,7 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th><input type="checkbox" id="selectall"/></th>
 			<th><g:message code="groupMember.person.photo.label" default="Photo"/></th>
 			<th><g:message code="groupMember.person.fullName.label" default="Full Name"/></th>
 			<th><g:message code="groupMember.person.gender.label" default="Gender"/></th>
@@ -14,7 +15,12 @@
 
 		<g:each in="${groupMemberList}" var="groupMemberBean">
 		<tr>
-			<td><img class="photo_small" src="${createLink(controller:'GroupMember', action:'renderPhoto', id:groupMemberBean.id)}"/></td>
+			<td>
+				<input type="checkbox" class="delete" name="delete" value="${groupMemberBean.id}">
+			</td>
+			<td>
+				<img class="photo_small" src="${createLink(controller:'GroupMember', action:'renderPhoto', id:groupMemberBean.id)}"/>
+			</td>
 			<td>${groupMemberBean.person.firstSurname} ${groupMemberBean.person.secondSurname}, ${groupMemberBean.person.firstName}</td>
 			<td>
 				<g:message code="groupMember.person.gender.${groupMemberBean.person.gender}.label" default="--"/>
@@ -42,3 +48,26 @@
 
 	</tbody>
 </table> <!-- table -->
+
+<SCRIPT language="javascript">
+	$(function(){
+	 
+	    // add multiple select / deselect functionality
+	    $("#selectall").click(function () {
+			console.log($('.delete'));
+			$('.delete').attr('checked', this.checked);
+	    });
+	 
+	    // if all checkbox are selected, check the selectall checkbox
+	    // and viceversa
+	    $(".delete").click(function(){
+	 
+	        if($(".delete").length == $(".delete:checked").length) {
+	            $("#selectall").attr("checked", "checked");
+	        } else {
+	            $("#selectall").removeAttr("checked");
+	        }
+	 
+	    });
+	});
+</SCRIPT>

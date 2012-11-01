@@ -11,6 +11,7 @@ class User {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+	String lang = "es"
 
 	static constraints = {
 		username blank: false, unique: true

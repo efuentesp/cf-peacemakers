@@ -10,6 +10,10 @@ grails.plugin.cloudfoundry.username = "efuentesp@gmail.com"
 grails.plugin.cloudfoundry.password = "s4nt4nd3r"
 grails.plugin.cloudfoundry.target = "api.peacemakers.cloudfoundry.me"
 
+//grails.plugin.cloudfoundry.username = "efuentesp@gmail.com"
+//grails.plugin.cloudfoundry.password = "s4ntander"
+//grails.plugin.cloudfoundry.target = "http://api.aws.af.cm"
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {

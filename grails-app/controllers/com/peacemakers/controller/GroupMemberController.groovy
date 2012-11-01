@@ -197,7 +197,10 @@ class GroupMemberController {
 			println "Size: ${uploadedFile.size}"
 			println "ContentType: ${uploadedFile.contentType}"
 			
-			def webRootDir = servletContext.getRealPath("/")
+			println "TMPDIR: " + System.getProperty("java.io.tmpdir")
+			
+			//def webRootDir = servletContext.getRealPath("/")
+			def webRootDir = System.getProperty("java.io.tmpdir")
 			userDir = new File(webRootDir, "/zipFiles/${socialGroup.id}/")
 			userDir.mkdirs()
 			def uploadedZipFile = new File(userDir, uploadedFile.originalFilename)
@@ -222,7 +225,7 @@ class GroupMemberController {
 	
 	private def unzip(uploadedZipFile, userDir) {
 		try {
-			antUtilsService.unzip(uploadedZipFile.toString(), userDir.toString(), true)
+			antUtilsService.unzip(uploadedZipFile.toString(), userDir.toString(), "flatten", true)
 		} catch (org.grails.plugins.grailsant.UnzipException e) {
 			println e.message
 			println e.fileName
@@ -234,22 +237,21 @@ class GroupMemberController {
 		def i=0
 		userDir.eachFileMatch(~/.*.(?:csv|txt)/) { file ->
 			
+			def fileText = file.text.replaceAll(';', ',')
+			file.write(fileText)
+			
 			file.splitEachLine(",") { field ->
 				
 				i++
-				
-				//println "GroupMember[${field[0]}]:"
-				//println "   First Name: ${field[4]}"
-				//println "   First Surname: ${field[2]}"
-				//println "   Second Surname: ${field[3]}"
-				//println "   Gender: ${field[5]}"
-				//println "   Birthday: ${field[6]}"
-				//def birthday = (field[6]) ? new Date().parse("yyyy-MM-dd", "${field[6]}") : null
-				//println "   ->Birthay: ${birthday}"
 
 				def firstName = field[0]
 				def firstSurname = field[1]
 				def secondSurname = field[2]
+				if (!secondSurname) {
+					def lastName = firstSurname.split(" ")
+					firstSurname = lastName[0]
+					secondSurname = lastName[1]
+				}
 				def gender = field[3]
 				def birthday = (field[4]) ? new Date().parse("yyyy-MM-dd", "${field[4]}") : null
 				def nationalIdNumber = field[5]
@@ -279,21 +281,16 @@ class GroupMemberController {
 					}
 				}
 				
-				/*
-				userId = field[4].toLowerCase().replaceAll(~/ /, "") + '.' + field[2].toLowerCase().replaceAll(~/ /, "")
-				password = field[4].toLowerCase().replaceAll(~/ /, "")
-				println "   User: ${userId}"
-				userName = User.findByUsername(userId) ?: new User(username: userId, enabled: true, password: password).save(failOnError: true)
-				if (!userName.authorities.contains(studentRole)) {
-					UserRole.create userName, studentRole, true
-				}
-				*/
-				
-				//def userName = getUserByName(firstName, firstSurname, secondSurname)
 				def userName = createUserName(person)
 				
 				def imageTool = new ImageTool()
-				imageTool.load("${userDir}/${i}.jpg")
+				try{
+					imageTool.load("${userDir}/${i}.JPG")
+				}
+				catch (java.io.FileNotFoundException e) {
+					def webRootDir = servletContext.getRealPath("/")
+					imageTool.load("${webRootDir}/fileupload/img/unknown-person.jpg")
+				}
 				//imageTool.saveOriginal()
 				imageTool.thumbnail(180)
 				//groupMember.photo = imageTool.getBytes("JPEG")
@@ -417,6 +414,26 @@ class GroupMemberController {
 		}
 	}
 	
+	def bulkDelete() {
+		println "bulkDelete: ${params}"
+		
+		params.delete.each { memberId ->
+			println memberId
+			def groupMember = GroupMember.get(memberId)
+			try {
+				groupMember.delete(flush: true)
+				// TODO: Delete orphan users
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
+				//redirect(action: "list", id: params.socialGroup)
+			}
+			catch (DataIntegrityViolationException e) {
+				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
+				//redirect(action: "list", id: params.socialGroup)
+			}
+		}
+		redirect(action: "list", id: params.socialGroup)
+	}
+	
 	
 	def renderPhoto() {
 		def groupMemberPhoto = GroupMember.get(params.id)
@@ -439,7 +456,6 @@ class GroupMemberController {
 		
 		println "   User: ${userId}"
 		
-		// TODO: Encode password
 		def userName = User.findByUsername(userId) ?: new User(	username: userId,
 																enabled: true,
 																password: password)
@@ -461,8 +477,7 @@ class GroupMemberController {
 		def password = person.firstSurname.toLowerCase().replaceAll(~/ /, "")
 		
 		println "   User: ${userId}"
-		
-		// TODO: Encode password
+
 		def userName = User.findByUsername(userId) ?: new User(	username: userId,
 																enabled: true,
 																password: password,

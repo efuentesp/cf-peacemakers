@@ -4,6 +4,7 @@ import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.support.RequestContextUtils as RCU
 
 import com.peacemakers.domain.Address;
 import com.peacemakers.domain.GeoType;
@@ -22,11 +23,19 @@ class SocialGroupController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
+		// Get User signed in
+		def user = User.get(springSecurityService.principal.id)
+		
+		params.lang = user.lang
+		
 		redirect(action: "schoolList", params: params)
 	}
 	
 	def schoolList() {
 		//println "schoolList: ${params}"
+		
+		def lang = RCU.getLocale(request)
+		//def lang = session['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']
 		
 		// Get User signed in
 		def user = User.get(springSecurityService.principal.id)
@@ -54,7 +63,7 @@ class SocialGroupController {
 		// Find all Countries to use in combo-box
 		def countries = Geography.findAllByGeoType(GeoType.COUNTRY)
 		
-		[country: country, city: city, countries: countries, socialGroupList: socialGroupList, user:user, action: 'school']
+		[country: country, city: city, countries: countries, socialGroupList: socialGroupList, user: user, lang: lang, action: 'school']
 	}
 	
 	def schoolCreate() {

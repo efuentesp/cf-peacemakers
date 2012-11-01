@@ -19,8 +19,26 @@ class StudentController {
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index() {
-		//redirect(action: "list", params: params)
+	def index() {
+		def userSigned = User.get(springSecurityService.principal.id)
+		
+		// Find User's Group Member
+		def userSignedId = userSigned.id
+		def userGroupMember = GroupMember.find {
+			user.id == userSignedId
+		}
+		
+		// Find School
+		//TODO: For now, it only takes the language from school
+		def school = userGroupMember?.socialGroup?.parent
+		println "School: ${school.name} (${school.lang})"
+		
+		params.lang = school.lang
+		
+		redirect(action: "main", params: params)
+	}
+	
+    def main() {
 		
 		// Get User signed
 		def userSigned = User.get(springSecurityService.principal.id)
@@ -127,7 +145,7 @@ class StudentController {
 			}
 		}
 		
-		redirect(action: "index")
+		redirect(action: "main")
 	}
 	
 	def renderPhoto() {
