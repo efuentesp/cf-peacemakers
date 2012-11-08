@@ -17,8 +17,8 @@
 				<td>${surveyApplied.surveyAssigned.sequence}</td>
 				<td>${surveyApplied.surveyAssigned.survey.name}</td>
 				<td>
-					<g:if test="${surveyApplied.applied}"><span class="label label-success"><g:message code="surveyAssigned.applied.true.label" default="Applied"/></span></g:if>
-					<g:else><span class="label label-warning"><g:message code="surveyAssigned.applied.false.label" default="Not Applied"/></span></g:else>
+					<g:if test="${surveyApplied.applied}"><span><g:message code="surveyAssigned.applied.true.label" default="Applied"/></span></g:if>
+					<g:else><span><g:message code="surveyAssigned.applied.false.label" default="Not Applied"/></span></g:else>
 				</td>
 	
 				<td class="link">

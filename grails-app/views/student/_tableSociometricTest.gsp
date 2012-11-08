@@ -16,8 +16,8 @@
 				<td>${sociometricTestApplied.sociometricTest.sequence}</td>
 				<td>${sociometricTestApplied.sociometricTest.sociometricCriteria.name}</td>
 				<td>
-					<g:if test="${sociometricTestApplied.applied}"><span class="label label-success"><g:message code="sociometricTest.applied.true.label" default="Applied"/></span></g:if>
-					<g:else><span class="label label-warning"><g:message code="sociometricTest.applied.false.label" default="Not Applied"/></span></g:else>
+					<g:if test="${sociometricTestApplied.applied}"><span><g:message code="sociometricTest.applied.true.label" default="Applied"/></span></g:if>
+					<g:else><span><g:message code="sociometricTest.applied.false.label" default="Not Applied"/></span></g:else>
 				</td>
 	
 				<td class="link">

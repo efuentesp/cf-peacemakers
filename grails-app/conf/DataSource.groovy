@@ -28,12 +28,31 @@ environments {
 	   def credentials = envVar?grails.converters.JSON.parse(envVar)["mysql-5.1"][0]["credentials"]:null
 	
 	   dataSource {
-	      pooled = true
-	      dbCreate = "update"
-	      driverClassName = "com.mysql.jdbc.Driver"
-	      url =  credentials?"jdbc:mysql://${credentials.hostname}:${credentials.port}/${credentials.name}?useUnicode=yes&characterEncoding=UTF-8":""
-	      username = credentials?credentials.username:""
-	      password = credentails?credentials.password:""
+// AppFog
+//	      pooled = true
+//	      dbCreate = "update"
+//	      driverClassName = "com.mysql.jdbc.Driver"
+//	      url =  credentials?"jdbc:mysql://${credentials.hostname}:${credentials.port}/${credentials.name}?useUnicode=yes&characterEncoding=UTF-8":""
+//	      username = credentials?credentials.username:""
+//	      password = credentails?credentials.password:""
+		   
+		   // Amazon
+		   pooled = true
+		   driverClassName = "com.mysql.jdbc.Driver"
+		   dbCreate = "update" // one of 'create', 'create-drop','update'
+		   username = 'root'
+		   password = 's4ntander'
+		   url = 'jdbc:mysql://aa1fduyt7ko4asc.cx7tras9rgfl.us-east-1.rds.amazonaws.com:3306/ebdb'
+		   dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+		   properties {
+			   validationQuery = "SELECT 1"
+			   testOnBorrow = true
+			   testOnReturn = true
+			   testWhileIdle = true
+			   timeBetweenEvictionRunsMillis = 1000 * 60 * 30
+			   numTestsPerEvictionRun = 3
+			   minEvictableIdleTimeMillis = 1000 * 60 * 30
+		   }
 	   }
 	}
 }

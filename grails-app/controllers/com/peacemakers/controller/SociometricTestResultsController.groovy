@@ -114,6 +114,8 @@ class SociometricTestResultsController {
 			tArray << [name: "${g.message(code: 'sociometricTest.list.header', default:'Test')} ${sociometricTestArray[t].sequence}", tiles: yArray]
 		}
 		
+		//println tArray
+		
 		def data = [ headers: groupMemberArray, tests: tArray ]
 		
 		render data as JSON

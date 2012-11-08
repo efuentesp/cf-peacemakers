@@ -46,10 +46,13 @@
 					    var sociometricCriteriaCd = $(this).attr('id');
 					    var sociometricCriteriaId = $(this).data('id');
 					    //console.log(sociometricCriteriaId);
+					    console.log(document.URL);
+					    console.log(window.location.host);
 				    
 					    $.ajax({
 					      async: false,
-					      url: "/PeaceMakerProgram/sociometricTestResults/piejson",
+					      //url: "/cf-peacemakers/sociometricTestResults/piejson",
+					      url: "/sociometricTestResults/piejson",
 					      data: { criteria: sociometricCriteriaId, group: socialGroupId },
 					      dataType:"json",
 					      success: function(data) {

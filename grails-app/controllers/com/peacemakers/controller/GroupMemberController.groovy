@@ -235,7 +235,10 @@ class GroupMemberController {
 	private def addBulkGroupMembers(userDir, socialGroup) {
 		
 		def i=0
-		userDir.eachFileMatch(~/.*.(?:csv|txt)/) { file ->
+		
+		userDir.eachFileMatch(~/.*.(?:csv)/) { file ->
+			
+			println "File name: ${file}"
 			
 			def fileText = file.text.replaceAll(';', ',')
 			file.write(fileText)
@@ -250,7 +253,9 @@ class GroupMemberController {
 				if (!secondSurname) {
 					def lastName = firstSurname.split(" ")
 					firstSurname = lastName[0]
-					secondSurname = lastName[1]
+					if (lastName.size() > 1) {
+						secondSurname = lastName[1]
+					}
 				}
 				def gender = field[3]
 				def birthday = (field[4]) ? new Date().parse("yyyy-MM-dd", "${field[4]}") : null
