@@ -182,42 +182,84 @@ class GroupMemberController {
 		def userDir
 
 		def acceptContentType = ['application/zip', 'application/x-zip-compressed']
+		def acceptContentTypeCSV = ['text/csv', 'application/vnd.ms-excel']
 		//def studentRole = Role.findByAuthority('ROLE_STUDENT') ?: new Role(authority: 'ROLE_STUDENT').save(failOnError: true)
 		
+		def csvUploadedFile = request.getFile('csvFile')
 		def uploadedFile = request.getFile('zipFile')
+		
 		def socialGroup = SocialGroup.get(params.socialGroup)
 		
-		println "Content type: ${uploadedFile.contentType}"
+		def groupMemberArray = []
 		
-		if(!uploadedFile.empty && acceptContentType.contains(uploadedFile.contentType)) {
-			
-			println "Class: ${uploadedFile.class}"
-			println "Name: ${uploadedFile.name}"
-			println "OriginalFileName: ${uploadedFile.originalFilename}"
-			println "Size: ${uploadedFile.size}"
-			println "ContentType: ${uploadedFile.contentType}"
-			
-			println "TMPDIR: " + System.getProperty("java.io.tmpdir")
+		println "Content type (CSV): ${csvUploadedFile.contentType}"
+		println "Content type (ZIP): ${uploadedFile.contentType}"
+		
+		if(!csvUploadedFile.empty && acceptContentTypeCSV.contains(csvUploadedFile.contentType)) {
 			
 			//def webRootDir = servletContext.getRealPath("/")
 			def webRootDir = System.getProperty("java.io.tmpdir")
 			userDir = new File(webRootDir, "/zipFiles/${socialGroup.id}/")
 			userDir.mkdirs()
-			def uploadedZipFile = new File(userDir, uploadedFile.originalFilename)
-			uploadedFile.transferTo(uploadedZipFile)
-			println "Uploaded directory: ${uploadedZipFile.toString()}"
-			println "User Dir: ${userDir.toString()}"
 			
-			unzip(uploadedZipFile, userDir)
-		
-			addBulkGroupMembers(userDir, socialGroup)
-		
-			userDir.deleteDir()
+			def uploadedCsvFile = new File(userDir, csvUploadedFile.originalFilename)
+			csvUploadedFile.transferTo(uploadedCsvFile)
 			
-			flash.message = message(code: 'default.created.message', args: [message(code: 'socialGroup.label', default: 'Social Group'), params.socialGroup])
-			redirect(action: "list", id: params.socialGroup)
+			def fileText = uploadedCsvFile.text.replaceAll(';', ',')
+			uploadedCsvFile.write(fileText)
+	
+			def i = 0
+			uploadedCsvFile.eachCsvLine { tokens->
+				def firstName = tokens[0]
+				def firstSurname = tokens[1]
+				def secondSurname = ''
+				if (tokens.size() == 3) {
+					secondSurname = tokens[2]
+				}
+				println tokens
+				i++
+				groupMemberArray << [index: i, firstName: firstName, firstSurname: firstSurname, secondSurname: secondSurname]
+			}
 		} else {
-			flash.message = message(code: 'groupMember.typeMismatch.file', args: [message(code: 'socialGroup.label', default: 'Social group'), params.socialGroup])
+			flash.message = message(code: 'groupMember.typeMismatch.csv.file', args: [message(code: 'socialGroup.label', default: 'Social group'), params.socialGroup])
+			//redirect(action: "createZip", id: params.socialGroup)
+		}
+		
+		if (groupMemberArray) {
+			if(!uploadedFile.empty && acceptContentType.contains(uploadedFile.contentType)) {
+				
+				println "Class: ${uploadedFile.class}"
+				println "Name: ${uploadedFile.name}"
+				println "OriginalFileName: ${uploadedFile.originalFilename}"
+				println "Size: ${uploadedFile.size}"
+				println "ContentType: ${uploadedFile.contentType}"
+				
+				println "TMPDIR: " + System.getProperty("java.io.tmpdir")
+				
+				//def webRootDir = servletContext.getRealPath("/")
+				def webRootDir = System.getProperty("java.io.tmpdir")
+				userDir = new File(webRootDir, "/zipFiles/${socialGroup.id}/")
+				userDir.mkdirs()
+				def uploadedZipFile = new File(userDir, uploadedFile.originalFilename)
+				uploadedFile.transferTo(uploadedZipFile)
+				println "Uploaded directory: ${uploadedZipFile.toString()}"
+				println "User Dir: ${userDir.toString()}"
+				
+				unzip(uploadedZipFile, userDir)
+			
+				addBulkGroupMembers(userDir, socialGroup, groupMemberArray)
+			
+				userDir.deleteDir()
+				
+				//flash.message = message(code: 'default.created.message', args: [message(code: 'socialGroup.label', default: 'Social Group'), params.socialGroup])
+				redirect(action: "list", id: params.socialGroup)
+			} else {
+				flash.message = message(code: 'groupMember.typeMismatch.zip.file', args: [message(code: 'socialGroup.label', default: 'Social group'), params.socialGroup])
+				//redirect(action: "createZip", id: params.socialGroup)
+			}
+		}
+		
+		if (flash.message) {
 			redirect(action: "createZip", id: params.socialGroup)
 		}
 		
@@ -231,7 +273,36 @@ class GroupMemberController {
 			println e.fileName
 		}
 	}
+
+	private def addBulkGroupMembers(userDir, socialGroup, groupMemberArray) {
+		groupMemberArray.each { gm ->
+			def person = new Person(nationalIdNumber: null, firstName: gm.firstName, firstSurname: gm.firstSurname, secondSurname: gm.secondSurname, birthday: null, gender: null)
+			if (!person.save(flush: true)) {
+				person.errors.each {
+					println it
+				}
+			}
+			
+			def userName = createUserName(person)
+			
+			def imageTool = new ImageTool()
+			try{
+				imageTool.load("${userDir}/${gm.index}.JPG")
+			}
+			catch (java.io.FileNotFoundException e) {
+				def webRootDir = servletContext.getRealPath("/")
+				imageTool.load("${webRootDir}/fileupload/img/unknown-person.jpg")
+			}
+
+			imageTool.thumbnail(180)
+
+			def groupMember = new GroupMember(person:person, photo: imageTool.getBytes("JPEG"), user:userName)
+			
+			socialGroup.addToGroupMembers(groupMember).save(failOnError: true)
+		}
+	}
 	
+	/*	
 	private def addBulkGroupMembers(userDir, socialGroup) {
 		
 		def i=0
@@ -310,6 +381,7 @@ class GroupMemberController {
 		}
 
 	}
+	*/
 	
 	def update() {
 		//println params

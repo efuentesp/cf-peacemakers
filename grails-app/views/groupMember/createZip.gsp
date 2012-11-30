@@ -54,13 +54,22 @@
 				<g:uploadForm action="saveZip" method="post" class="form-horizontal">
 
 						<g:hiddenField name="socialGroup" value="${socialGroupSelected?.id}" />
-						
+
+						<!-- Group Member List (CSV file) -->
 						<div class="control-group">
 							<label class="control-label"><g:message code="groupMember.zipFile.label" default="ZIP file"/></label>
 							<div class="controls">
-								<input type="file" id="zipFile" name="zipFile"/>
+								<input type="file" id="zipFile" name="zipFile" required/>
 							</div>
 						</div>
+						
+						<!-- Photos (ZIP file) -->
+						<div class="control-group">
+							<label class="control-label"><g:message code="groupMember.csvFile.label" default="CSV file"/></label>
+							<div class="controls">
+								<input type="file" id="csvFile" name="csvFile" required/>
+							</div>
+						</div>						
 												
 						<div class="form-actions">
 							<button type="submit" class="btn btn-primary">

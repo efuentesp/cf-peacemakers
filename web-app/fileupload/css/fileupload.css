@@ -1,11 +1,11 @@
 /* PHOTOS */
 img.photo_big {
-  width: 12em;
-  height: 14em;
+  width: 100px;
+  height: 120px;
 }
 img.photo {
-  width: 6.5em;
-  height: 7.5em;
+  width: 100px;
+  height: 120px;
 }
 img.photo_small {
   width: 4em;
