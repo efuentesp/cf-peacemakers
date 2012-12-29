@@ -30,6 +30,7 @@
 		<g:javascript library='jquery' />
 
 		<g:layoutHead/>
+		<r:require module="export"/>
         <r:layoutResources />
 	</head>
 	

@@ -74,7 +74,7 @@
 							<div class="controls inline-inputs">
 								<input type="text" name="firstName" value="${groupMemberBean?.person.firstName}" required="" id="firstName" autocomplete='off' class="input-medium" placeholder="<g:message code="groupMember.person.firstName.label" default="First Name"/>">
 								<input type="text" name="firstSurname" value="${groupMemberBean?.person.firstSurname}" required="" id="firstSurname" autocomplete='off' class="input-medium" placeholder="<g:message code="groupMember.person.firstSurname.label" default="First Surname"/>">
-								<input type="text" name="secondSurname" value="<g:if test="${groupMemberBean?.person.secondSurname}">${groupMemberBean?.person.secondSurname}</g:if>" required="" id="firstSurname" autocomplete='off' class="input-medium" placeholder="<g:message code="groupMember.person.secondSurname.label" default="Second Surname"/>">
+								<input type="text" name="secondSurname" value="<g:if test="${groupMemberBean?.person.secondSurname}">${groupMemberBean?.person.secondSurname}</g:if>" id="secondSurname" autocomplete='off' class="input-medium" placeholder="<g:message code="groupMember.person.secondSurname.label" default="Second Surname"/>">
 							</div>
 						</div>
 						

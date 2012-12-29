@@ -32,7 +32,7 @@
         <r:layoutResources />
 	</head>
 	
-	<body>
+	<body ondragstart="return false" onselectstart="return false">
 	
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">

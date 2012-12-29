@@ -11,6 +11,9 @@ import com.peacemakers.security.UserRole;
 @Secured(['ROLE_ADMIN'])
 class UserController {
 	def springSecurityService
+	
+	def exportService
+	def grailsApplication  //inject GrailsApplication
 
     def index() {
 		redirect(action: "list", params: params)
@@ -43,6 +46,24 @@ class UserController {
 		
 		def groupMembers = GroupMember.findAll(sort:"person") {
 			socialGroup.id == params.id.toLong()
+		}
+		
+		if(params?.format && params.format != "html") {
+			def group = []
+			groupMembers.each { gm ->
+				group << [name: gm.getFullName(), user: gm.user.username, password: gm.user.unencode]
+			}
+			
+			def filename = "passwords.${params.extension}"
+			//def filename = "${socialGroup.name}.${params.extension}"
+			
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			response.setHeader("Content-disposition", "attachment; filename=${filename}")
+			
+			List fields = ["name", "user", "password"]
+			Map labels = ["name": "Name", "user": "User", "password": "Password"]
+			
+			exportService.export(params.format, response.outputStream, group, fields, labels, [:], ["csv.encoding":"UTF-8"])
 		}
 		
 		[socialGroupSelected:socialGroup, groupMemberList:groupMembers, user:user]

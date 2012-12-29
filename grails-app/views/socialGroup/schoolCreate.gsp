@@ -78,7 +78,7 @@
 											labelMessage="${g.message(code:"socialGroup.address.label", default:"Address")}"
 											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
 											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
-								<g:textArea name="schoolStreet" rows="5" class="input-xxlarge" required="" value=""/> <br>
+								<g:textArea name="schoolStreet" rows="5" class="input-xxlarge" required="" value="-"/> <br>
 								<span class="input-xxlarge uneditable-input">${geoBean.name}, ${geoBean?.parent.name} (${geoBean?.parent?.parent.name})</span>
 							</tb:controlGroup>								
 							

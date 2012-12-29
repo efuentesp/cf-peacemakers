@@ -10,7 +10,10 @@
 					<li>
 						<div class="student-card">
 							<div class="student-photo">
-								<img class="photo_big" src="${createLink(controller:'student', action:'renderPhoto', id:groupMemberBean.id)}"/>
+								<div style="position:relative; height:120px;">
+								<img class="photo_big" src="${createLink(controller:'student', action:'renderPhoto', id:groupMemberBean.id)}" style="z-index:0;position:absolute;"/>
+								<img class="photo_big" src="${resource(dir: 'fileupload/img', file: 'cover.gif')}" style="z-index:1;position:absolute;" />
+								</div>
 							</div>
 							<div class="student-name">
 								<h4>${groupMemberBean.getFullName()}</h4>

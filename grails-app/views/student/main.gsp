@@ -23,7 +23,10 @@
 			
 			<div class="well row">
 				<div class="span1">
-					<img class="photo_small" src="${createLink(controller:'student', action:'renderPhoto', id:groupMember.id)}"/>
+					<div class="photo_small">
+					<img class="photo_small" src="${createLink(controller:'student', action:'renderPhoto', id:groupMember.id)}" style="z-index:0;position:absolute;"/>
+					<img class="photo_small" src="${resource(dir: 'fileupload/img', file: 'cover.gif')}" style="z-index:1;position:absolute;" />
+					</div>
 				</div>
 				<div class="span6">
 					<h4>${groupMember.getFullName()}</h4>

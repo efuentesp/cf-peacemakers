@@ -30,6 +30,7 @@
 			<g:render template="action"/>
 			    	
 			<!-- Table -->
+			<export:formats formats="['pdf']" params="${params}"/>
 			<g:render template="tableSocialGroup"/>
 		
 			<!-- Pagination --> 

@@ -14,6 +14,7 @@ import com.peacemakers.security.UserRole;
 
 import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured;
+import groovy.io.FileType;
 
 @Secured(['ROLE_ADMIN'])
 class GroupMemberController {
@@ -209,16 +210,25 @@ class GroupMemberController {
 			uploadedCsvFile.write(fileText)
 	
 			def i = 0
-			uploadedCsvFile.eachCsvLine { tokens->
-				def firstName = tokens[0]
-				def firstSurname = tokens[1]
-				def secondSurname = ''
-				if (tokens.size() == 3) {
-					secondSurname = tokens[2]
+			//uploadedCsvFile.eachCsvLine { tokens->
+			uploadedCsvFile.toCsvReader(['charset':'UTF-8']).eachLine { tokens ->
+				if (tokens.size() >= 2 && tokens.size() <= 3 && tokens[0] != '' && tokens[1] != '') {
+					def firstName = '** Sin nombre **'
+					if (tokens[0] != '') {
+						firstName = tokens[0]
+					}
+					def firstSurname = '** Sin apellido **'
+					if (tokens[1] != '') {
+						firstSurname = tokens[1]
+					}
+					def secondSurname = ''
+					if (tokens.size() == 3 && tokens[2] != '') {
+						secondSurname = tokens[2]
+					}
+					println tokens
+					i++
+					groupMemberArray << [index: i, firstName: firstName, firstSurname: firstSurname, secondSurname: secondSurname]
 				}
-				println tokens
-				i++
-				groupMemberArray << [index: i, firstName: firstName, firstSurname: firstSurname, secondSurname: secondSurname]
 			}
 		} else {
 			flash.message = message(code: 'groupMember.typeMismatch.csv.file', args: [message(code: 'socialGroup.label', default: 'Social group'), params.socialGroup])
@@ -266,8 +276,22 @@ class GroupMemberController {
 	}
 	
 	private def unzip(uploadedZipFile, userDir) {
+		def acceptContentTypeCSV = ['text/csv', 'application/vnd.ms-excel']
 		try {
 			antUtilsService.unzip(uploadedZipFile.toString(), userDir.toString(), "flatten", true)
+
+			// Remove 0's from the beginning of the name file
+			def dir = new File(userDir.toString())
+			dir.eachFileRecurse (FileType.FILES) { file ->
+				println "${file.path} ${file.name} => ${file.name.replaceAll(/^0*/, '')}"
+				String oldName = file
+				String newName = file.name.replaceAll(/^0*/, '')
+				//new File(oldName).renameTo(new File(newName)) 
+			}
+			dir.eachFileRecurse (FileType.FILES) { file ->
+				println file
+			}
+			
 		} catch (org.grails.plugins.grailsant.UnzipException e) {
 			println e.message
 			println e.fileName
@@ -575,7 +599,7 @@ class GroupMemberController {
 		def userId = firstName.toLowerCase().replaceAll(~/ /, "") + '.' + firstSurname.toLowerCase().replaceAll(~/ /, "")
 		def password = firstName.toLowerCase().replaceAll(~/ /, "")
 		
-		println "   User: ${userId}"
+		//println "   User: ${userId}"
 		
 		def userName = User.findByUsername(userId) ?: new User(	username: userId,
 																enabled: true,
@@ -597,7 +621,7 @@ class GroupMemberController {
 		def userId = firstName[0].toLowerCase().replaceAll(~/ /, "") + person.id
 		def password = person.firstSurname.toLowerCase().replaceAll(~/ /, "")
 		
-		println "   User: ${userId}"
+		//println "   User: ${userId}"
 
 		def userName = User.findByUsername(userId) ?: new User(	username: userId,
 																enabled: true,
