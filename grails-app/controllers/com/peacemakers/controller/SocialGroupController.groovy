@@ -32,7 +32,7 @@ class SocialGroupController {
 	}
 	
 	def schoolList() {
-		//println "schoolList: ${params}"
+		println "schoolList: ${params}"
 		
 		def lang = RCU.getLocale(request)
 		//def lang = session['org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE']
@@ -60,10 +60,26 @@ class SocialGroupController {
 			
 		}
 		
+		if (params.schoolName) {
+			socialGroupList = SocialGroup.findByName(params.schoolName)
+			//println socialGroupList
+			
+			if (socialGroupList) {
+				city = socialGroupList.geo
+				country = socialGroupList.geo?.parent
+			}
+		}
+		
 		// Find all Countries to use in combo-box
 		def countries = Geography.findAllByGeoType(GeoType.COUNTRY)
 		
-		[country: country, city: city, countries: countries, socialGroupList: socialGroupList, user: user, lang: lang, action: 'school']
+		// List of Schools to use in Typehead search
+		def schoolList = SocialGroup.findAll {
+				groupType == SocialGroupType.SCHOOL
+		} 
+		def schoolJSON = schoolList.name as JSON
+		
+		[country: country, city: city, countries: countries, socialGroupList: socialGroupList, schoolJSON: schoolJSON, user: user, lang: lang, action: 'school']
 	}
 	
 	def schoolCreate() {

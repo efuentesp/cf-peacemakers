@@ -1,6 +1,24 @@
 <div class="span3">
 
 	<div class="well">
+		<h5><p class="muted"><g:message code="socialGroup.search.byschool.label" default="SEARCH BY SCHOOL"/></p></h5>
+		
+		<g:form action="schoolList" method="post" class="form-vertical">
+			<input 	type="text" class="input-large"
+			name="schoolName" required="" value="" autocomplete='off'
+			data-provide="typeahead" data-items="4"
+			data-source='${schoolJSON}'>
+			
+			<div>
+				<button type="submit" class="btn btn-info">
+					<i class="icon-search icon-white"></i>
+					<g:message code="default.button.search.label" default="Search"/>
+				</button>						
+			</div>				
+		</g:form>	
+	</div>
+	
+	<div class="well">
 	
 		<h5><p class="muted"><g:message code="socialGroup.search.bycity.label" default="SEARCH BY CITY"/></p></h5>
 	

@@ -19,7 +19,7 @@
 			<!--  Content Panel -->
 			<div class="span9">
 				
-				<g:if test="${city}">		
+				<g:if test="${socialGroupList}">		
 						
 					<!-- Page Header -->
 					<div>
