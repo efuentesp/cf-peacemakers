@@ -9,7 +9,7 @@ class SociometricTestResultsService {
 
     def getSummaryByGroupMember(SociometricTest test, SocialGroup group) {
 
-		def maxPercentage = 0
+		def maxPercentage = 30
 		
 		// Get the Sociometric Criteria from a Sociometric Test
 		//def sociometricCriteria = SociometricCriteria.get(test.id)

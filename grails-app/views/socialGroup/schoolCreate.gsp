@@ -29,7 +29,7 @@
 					</div>
 				</g:if>
 	
-				<!-- 
+
 				<g:hasErrors bean="${schoolBean}">
 					<div class="alert alert-block alert-error">
 						<a class="close" data-dismiss="alert">&times;</a>
@@ -41,16 +41,12 @@
 							</g:eachError>
 						</ul>
 					</div>
-				</g:hasErrors> -->
+				</g:hasErrors>
 	
 				<!-- Form -->
 				<fieldset>
 					<g:form action="schoolSave" method="post" class="form-horizontal">
-	
-							<g:hiddenField name="geo" value="${geoBean?.id}" />
-							<g:hiddenField name="city" value="${city}" />
-							<g:hiddenField name="country" value="${country}" />
-	
+
 							<tb:controlGroup name="name"
 											bean="schoolBean"
 											labelMessage="${g.message(code:"socialGroup.name.label", default:"Name")}"
@@ -79,8 +75,53 @@
 											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
 											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
 								<g:textArea name="schoolStreet" rows="5" class="input-xxlarge" required="" value="-"/> <br>
-								<span class="input-xxlarge uneditable-input">${geoBean.name}, ${geoBean?.parent.name} (${geoBean?.parent?.parent.name})</span>
-							</tb:controlGroup>								
+
+							</tb:controlGroup>
+
+							<tb:controlGroup name="country"
+											bean="schoolBean"
+											labelMessage="${g.message(code:"geography.geoType.country.label", default:"Country")}"
+											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
+											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
+
+									<g:select 	from="${countries}"
+										id="schoolCountry"
+										name="schoolCountry"
+										class="input-medium"
+										noSelection="['':'-- Seleccionar --']"
+										optionKey="id"
+										optionValue="name"
+										required=""
+										onchange="${ remoteFunction(
+													 action: 'getStatesByCountry',
+													 update: 'state',
+													 params: '\'country=\'+$(\'#schoolCountry\').val()') }"/>
+							</tb:controlGroup> 																			
+
+							<tb:controlGroup name="state"
+											bean="schoolBean"
+											labelMessage="${g.message(code:"geography.geoType.state.label", default:"State")}"
+											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
+											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
+								<g:select name="state" from="" disabled="false" class="input-medium"
+									onchange="${ remoteFunction(
+													action: 'getCitiesByState',
+													update: 'scity',
+													params: '\'state=\'+$(\'#state\').val()') }"/>
+							</tb:controlGroup>
+
+							<tb:controlGroup name="city"
+											bean="schoolBean"
+											labelMessage="${g.message(code:"geography.geoType.city.label", default:"City")}"
+											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
+											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
+								<div id="scity">
+									<input 	type="text" class="input-medium"
+										name="scity" required="" value="" autocomplete='off'
+										data-provide="typeahead" data-items="4"
+										data-source='${cityJSON}'>
+								</div>
+							</tb:controlGroup>
 							
 							<div class="form-actions">
 								<button type="submit" class="btn btn-primary">

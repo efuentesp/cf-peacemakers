@@ -83,7 +83,7 @@ class SocialGroupController {
 	}
 	
 	def schoolCreate() {
-		//println "schoolCreate: ${params}"
+		println "schoolCreate: ${params}"
 		
 		// Get User signed in
 		def user = User.get(springSecurityService.principal.id)
@@ -92,9 +92,13 @@ class SocialGroupController {
 		def countries = Geography.findAllByGeoType(GeoType.COUNTRY)
 		
 		// Get City selected
-		def geo = Geography.get(params.city.toLong())
+		def geo
+		if (params.city) {
+			geo = Geography.get(params.city.toLong())
+		}
 		
-		[countries: countries, geoBean: geo, city: geo.id, country: geo?.parent?.parent.id, user: user, action: 'school']
+		//[countries: countries, geoBean: geo, city: geo.id, country: geo?.parent?.parent.id, user: user, action: 'school']
+		[countries: countries, cityBean: geo, user: user, action: 'school']
 	}
 	
 	def schoolEdit() {
@@ -136,9 +140,27 @@ class SocialGroupController {
 	}
 	
 	def schoolSave() {
-		//println "schoolSave ${params}"
+		println "schoolSave ${params}"
 		
-		def geoBean = Geography.get(params.geo)
+		// Find City by name
+		def city = Geography.findByNameAndGeoType(params.schoolCity, GeoType.CITY)
+		
+		def geoBean
+		if (city) {
+			geoBean = city
+		} else {
+			def country = Geography.get(params.schoolCountry)
+			def state = Geography.get(params.state)
+			def cityCode = Geography.findAllByGeoType(GeoType.CITY).size()
+			//def isoCode = "${state.isoCode}-${cityCode}" 
+			geoBean = new Geography(name: params.schoolCity, parent: state, geoType: GeoType.CITY)
+			if (!geoBean.save(flush:true)) {
+				render(view: "schoolCreate", model: [schoolBean: geoBean, action:'school'])
+				return
+			}
+		}
+		
+		//def geoBean = Geography.get(params.geo)
 		def address = new Address(street:params.schoolStreet)
 		def groupCategory
 		
@@ -160,7 +182,7 @@ class SocialGroupController {
 		}
 
 		flash.message = message(code: 'default.created.message', args: [message(code: 'socialGroup.groupType.school.label', default: 'School'), school.id])
-		redirect(action: "schoolList", params: [city: params.city, country: params.country])
+		redirect(action: "schoolList", params: [city: geoBean.id, country: geoBean.parent.id])
 	}
 	
 	def schoolUpdate() {
@@ -554,4 +576,59 @@ class SocialGroupController {
 		
 		return stageTree
 	}
+	
+	// Get all Cities from a State
+	def getStatesByCountry() {
+		//println "getStatesByCountry: ${params}"
+		
+		if (params.country) {
+			def lst = []
+			def countrySelectedId = params.country.toLong()
+			
+			def country = Geography.get(countrySelectedId)
+			
+			def allStates = Geography.findAll {
+				parent == country
+			}
+			
+			allStates.each { state ->
+				lst << [id: state.id, name: state.name]
+			}
+			//println lst
+	
+			render g.select(from: lst, name: "schoolState", optionKey: 'id', optionValue:'name', required: "", noSelection: ['':'-- Seleccionar --'], class: "input-medium")
+		} else {
+			render g.select(name: "state", from: "", disabled: 'true', class: "input-medium")
+		}
+		
+	}
+	
+	def getCitiesByState() {
+		//println "getCitiesByState: ${params}"
+		
+		if (params.state) {
+			def lst = []
+			def stateSelectedId = params.state.toLong()
+			
+			def state = Geography.get(stateSelectedId)
+			
+			def allCities = Geography.findAll {
+				parent == state
+			}
+			
+			allCities.each { city ->
+				//lst << [id: city.id, name: city.name]
+				lst << city.name
+			}
+			//println lst
+	
+			render g.textField(name: 'schoolCity', class: "input-medium", required: "", autocomplete: 'off', 'data-items': '4', 'data-provide': 'typeahead', 'data-source': lst as JSON)
+			//println g.select(from: lst, name: "schoolCity", optionKey: 'id', optionValue:'name', required: "", noSelection: ['':'-- Seleccionar --'], class: "input-medium")
+		} else {
+			render g.select(name: "state", from: "", disabled: 'true', class: "input-medium")
+		}
+
+	}
+
+	
 }

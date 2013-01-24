@@ -211,7 +211,7 @@ class GroupMemberController {
 	
 			def i = 0
 			//uploadedCsvFile.eachCsvLine { tokens->
-			uploadedCsvFile.toCsvReader(['charset':'UTF-8']).eachLine { tokens ->
+			uploadedCsvFile.toCsvReader().eachLine { tokens ->
 				if (tokens.size() >= 2 && tokens.size() <= 3 && tokens[0] != '' && tokens[1] != '') {
 					def firstName = '** Sin nombre **'
 					if (tokens[0] != '') {

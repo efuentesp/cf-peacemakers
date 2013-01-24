@@ -21,7 +21,7 @@
 			<td>
 				<img class="photo_small" src="${createLink(controller:'GroupMember', action:'renderPhoto', id:groupMemberBean.id)}"/>
 			</td>
-			<td>${groupMemberBean.person.firstSurname} ${groupMemberBean.person.secondSurname}, ${groupMemberBean.person.firstName}</td>
+			<td>${groupMemberBean}</td>
 			<td>
 				<g:message code="groupMember.person.gender.${groupMemberBean.person.gender}.label" default="--"/>
 			</td>

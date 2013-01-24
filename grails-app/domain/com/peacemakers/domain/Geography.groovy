@@ -25,11 +25,11 @@ class Geography {
 	byte[] flag
 
     static constraints = {
-		isoCode (blank:false, unique:true, size:2..12, matches:"[A-Z-]+")
-		abbreviation (nullable:true, size:2..8, matches:"[A-Za-z.]+")
-		name (blank:false, size:2..25)
-		parent (nullable:true)
-		geoType (nullable:false)
+		isoCode (nullable: true, unique: true, size: 2..12, matches: "[A-Z-]+")
+		abbreviation (nullable: true, size: 2..8, matches: "[A-Za-z.]+")
+		name (blank: false, size: 2..25)
+		parent (nullable: true)
+		geoType (nullable: false)
 		flag (nullable: true)
     }
 	

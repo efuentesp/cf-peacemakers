@@ -128,4 +128,31 @@ class GeographyController {
 		def country = Geography.findAllByGeoType(GeoType.COUNTRY)
 		[geoList: geoList, countryList:country, countrySelected:params.country, action: 'city']
 	}
+	
+	def geoName() {
+		withHttp(uri:"http://api.geonames.org/") {
+			def json = get(path : '/search', query : [name:'san martin', country: 'MX', lang: 'es', style: 'full', type: 'xml', maxRows: 10, username: 'efuentesp'])
+			//def allNodes = json.depthFirst().collect{ it }
+			json.geoname.each {
+				println "${it.name} (${it.geonameId}), State: (${it.adminCode1.'@ISO3166-2'.text()}) ${it.adminCode1}, Country: (${it.countryCode}) ${it.countryName}"
+				def isoCodeStr = "${it.countryCode}-${it.adminCode1.'@ISO3166-2'.text()}"
+				println isoCodeStr
+				def state = Geography.findAllByIsoCode(isoCodeStr)
+				println state.name
+			}
+			//println "XML: ${json.geoname.name.text()}"
+/*			
+			json.geonames.each { geo ->
+				if (geo.adminCode1) {
+					withHttp(uri:"http://api.geonames.org/") {
+						def jsonCountry = get(path : '/search', query : [country: 'MX', adminCode1: geo.adminCode1, featureCode: 'ADM1', lang: 'es', style: 'full', type: 'json', maxRows: 1, username: 'efuentesp'])
+						println "State: ${jsonCountry.geonames.name} (${jsonCountry.geonames.adminCode1}"
+					}
+					println "Name: ${geo.name}, Id: ${geo.geonameId}, State: ${geo.adminCode1}, Country: (${geo.countryCode}) ${geo.countryName}"
+				}
+			}
+*/			
+			//println "Response: ${json.geonames}"
+		}
+	}
 }

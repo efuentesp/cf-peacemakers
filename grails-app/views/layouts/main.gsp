@@ -55,6 +55,7 @@
 
 				    <div class="nav-collapse">
 				    	<!-- Home -->
+				    	<!-- 
 					    <ul class="nav">
 						    <li class="active">
 							    <a href="${createLink(uri: '/')}">
@@ -62,17 +63,44 @@
 							    	<g:message code="default.navbar.home" default="Home"/>
 							    </a>
 						    </li>
-						</ul> <!-- /nav -->
+						</ul>--> <!-- /nav -->
 
 						<!-- Social Groups (Schools) -->
+						<ul class="nav">
+						    <li class="dropdown">
+						    	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    		<i class="icon-bell icon-white"></i>
+						    		<g:message code="default.navbar.setup.socialGroup.schools" default="Schools"/>
+						    		<b class="caret"></b>
+						    	</a>
+						    	<ul class="dropdown-menu">
+						    		<!-- List Schools -->
+						    		<li>
+						    			<a href="${createLink(uri: '/socialGroup')}">
+						    				<i class="icon-search"></i>
+						    				<g:message code="default.button.search.label" default="Search"/>
+						    			</a>
+						    		</li>						    							    		
+						    		<!-- List Schools -->
+						    		<li>
+						    			<a href="${createLink(uri: '/socialGroup/schoolCreate')}">
+						    				<i class="icon-plus"></i>
+						    				<g:message code="default.button.create.label" default="Add"/>
+						    			</a>
+						    		</li>	
+						    	</ul>					    	
+						    </li>
+						</ul> <!-- /nav -->
+
+						<!-- 
 					    <ul class="nav">
 						    <li <g:if test="${controller} == 'socialGroup'">class="active"</g:if> >
 				    			<a href="${createLink(uri: '/socialGroup')}">
 				    				<i class="icon-bell"></i>
 				    				<g:message code="default.navbar.setup.socialGroup.schools" default="Schools"/>
-				    			</a>
+				    			</a>				    			
 						    </li>
-						</ul> <!-- /nav -->
+						</ul>--> <!-- /nav -->
 						
 						<!-- Setup -->
 						<ul class="nav">
@@ -83,6 +111,14 @@
 						    		<b class="caret"></b>
 						    	</a>
 						    	<ul class="dropdown-menu">
+						    		<!-- Geographies -->
+						    		<li>
+						    			<a href="${createLink(uri: '/geography')}">
+						    				<i class="icon-globe"></i>
+						    				<g:message code="default.navbar.setup.geography" default="Geography"/>
+						    			</a>
+						    		</li>
+
 						    		<!-- Surveys -->
 						    		<li>
 						    			<a href="${createLink(uri: '/survey')}">

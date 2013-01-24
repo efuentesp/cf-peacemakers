@@ -17,12 +17,14 @@
 							<g:message code="geography.subdivision.list.header" default="Subdivisions" />
 						</a>
 					</li>
+					<!-- 
 					<li <g:if test = "${action == 'city'}"> class="active" </g:if> >
 						<a href="${createLink(uri: '/geography/cityList')}" class="list">
 							<i class="icon-list icon-white"></i>
 							<g:message code="geography.city.list.header" default="Cities" />
 						</a>
 					</li>
+					-->
 				</ul>
 			</div>
 		</div> <!-- /span3 -->
