@@ -125,7 +125,7 @@ class StudentController {
 	}
 	
 	def vote() {
-		//println "vote: ${params}"
+		println "vote: ${params}"
 		def socialGroup = SocialGroup.get(params.socialGroup)
 		def sociometricTest = SociometricTest.get(params.sociometricTest)
 		def fromGroupMember = GroupMember.get(params.fromGroupMember)
@@ -133,8 +133,8 @@ class StudentController {
 		def sociometricTestResult
 		def toGroupMember
 		
-		params.vote.each { groupMemberId, vote->
-			if (vote) {
+		params.vote.each { groupMemberId, vote ->
+			if (vote.toInteger() > 0) {
 				//println "[${groupMemberId}] => ${vote}"
 				toGroupMember = GroupMember.get(groupMemberId)
 				sociometricCriteriaResponse = SociometricCriteriaResponse.get(vote)
