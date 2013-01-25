@@ -9,12 +9,15 @@ import org.springframework.web.servlet.support.RequestContextUtils as RCU
 import com.peacemakers.domain.Address;
 import com.peacemakers.domain.GeoType;
 import com.peacemakers.domain.Geography;
+import com.peacemakers.domain.Person;
 import com.peacemakers.domain.SocialGroup;
 import com.peacemakers.domain.SocialGroupCategory;
 import com.peacemakers.domain.SocialGroupPeriod;
 import com.peacemakers.domain.SocialGroupStage;
 import com.peacemakers.domain.SocialGroupType;
+import com.peacemakers.security.Role;
 import com.peacemakers.security.User;
+import com.peacemakers.security.UserRole;
 
 @Secured(['ROLE_ADMIN'])
 class SocialGroupController {
@@ -142,6 +145,25 @@ class SocialGroupController {
 	def schoolSave() {
 		println "schoolSave ${params}"
 		
+		//def user = User.findByUsername(params.user)
+		def adminRole = Role.findByAuthority('ROLE_ADMIN_SCHOOL') ?: new Role(authority: 'ROLE_ADMIN_SCHOOL').save(failOnError: true)
+		
+		def adminUser = new User(username: params.user,
+							enabled: true,
+							password: params.password,
+							unencode: params.password)
+
+		//def adminUser = createAdminUser(params.user, params.password)
+		if (!adminUser.save(flush: true)) {
+			println "Error al crear el usuario del administrador."
+			render(view: "schoolCreate", model: [schoolBean: adminUser, action:'school'])
+			return
+		}
+
+		if (!adminUser.authorities.contains(adminRole)) {
+			UserRole.create adminUser, adminRole, true
+		}
+				
 		// Find City by name
 		def city = Geography.findByNameAndGeoType(params.schoolCity, GeoType.CITY)
 		
@@ -174,15 +196,23 @@ class SocialGroupController {
 			default:
 				groupCategory = null
 		}
+					
+		def school = new SocialGroup(name: params.schoolName,
+									 groupType: SocialGroupType.SCHOOL,
+									 groupCategory: groupCategory,
+									 geo: geoBean,
+									 address: address,
+									 admin: adminUser)
 		
-		def school = new SocialGroup(name:params.schoolName, groupType:SocialGroupType.SCHOOL, groupCategory: groupCategory, geo:geoBean, address:address)
 		if (!school.save(flush: true)) {
+			println "Error al crear el SocialGroup."
 			render(view: "schoolCreate", model: [schoolBean: school, action:'school'])
 			return
 		}
 
 		flash.message = message(code: 'default.created.message', args: [message(code: 'socialGroup.groupType.school.label', default: 'School'), school.id])
 		redirect(action: "schoolList", params: [city: geoBean.id, country: geoBean.parent.id])
+		
 	}
 	
 	def schoolUpdate() {
@@ -237,6 +267,8 @@ class SocialGroupController {
 			return
 		}
 
+		def admin = User.get(school.admin.id)
+		
 		try {
 			school.delete(flush: true)
 			flash.message = message(code: 'default.deleted.message', args: [message(code: 'socialGroup.groupType.school.label', default: 'School'), params.id])
@@ -246,6 +278,9 @@ class SocialGroupController {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'socialGroup.groupType.school.label', default: 'School'), params.id])
 			redirect(action: "schoolDelete", id: params.id)
 		}
+		
+		UserRole.removeAll(admin)
+		admin.delete(flush: true)
 	}
 	
 	def stageList() {
@@ -629,6 +664,5 @@ class SocialGroupController {
 		}
 
 	}
-
 	
 }

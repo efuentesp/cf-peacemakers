@@ -68,6 +68,24 @@
 							</div>
 						</div>
 					</fieldset>
+
+					<h4><g:message code="role.ROLE_ADMIN_SCHOOL.label" default="School Administrator"/></h4>
+
+					<tb:controlGroup name="user"
+									bean="user"
+									labelMessage="${g.message(code:"user.username.label", default:"User id")}"
+									error="${hasErrors(bean:user, field:'user', 'error')}"
+									errors="${g.renderErrors(bean:user, field:'user', as:'list')}">
+						<span class="input-medium uneditable-input">${schoolBean.admin.username}</span>
+					</tb:controlGroup>
+					
+					<tb:controlGroup name="password"
+									bean="user"
+									labelMessage="${g.message(code:"user.password.label", default:"Password")}"
+									error="${hasErrors(bean:user, field:'password', 'error')}"
+									errors="${g.renderErrors(bean:user, field:'password', as:'list')}">
+						<span class="input-medium uneditable-input">${schoolBean.admin.unencode}</span>
+					</tb:controlGroup>
 					
 					<div class="form-actions">
 						<button type="submit" class="btn btn-danger">

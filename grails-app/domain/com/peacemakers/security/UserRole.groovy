@@ -2,6 +2,8 @@ package com.peacemakers.security
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 
+import com.peacemakers.domain.SocialGroup;
+
 class UserRole implements Serializable {
 
 	User user

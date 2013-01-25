@@ -1,5 +1,7 @@
 package com.peacemakers.domain
 
+import com.peacemakers.security.User;
+
 private enum SocialGroupType {
 	SCHOOL ('SCHOOL'),
 	//STAGE ('STAGE'),
@@ -42,6 +44,7 @@ class SocialGroup {
 	Geography geo
 	List groupMembers
 	String lang = 'es'
+	User admin
 	
     static constraints = {
 		name (blank: false)
@@ -53,5 +56,6 @@ class SocialGroup {
 		address (nullable: true)
 		geo (nullable: true)
 		groupMembers(nullable: true)
+		admin(nullable: true)
     }
 }

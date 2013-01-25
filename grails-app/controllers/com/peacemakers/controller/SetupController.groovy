@@ -206,7 +206,16 @@ class SetupController {
 			}
 			def city = Geography.findByIsoCode(school.geo)
 			def address = new Address(street: school.address.street)
-			def schoolBean = new SocialGroup(name: school.name, groupType: SocialGroupType.SCHOOL, groupCategory: groupCategory, geo: city, address: address).save(failOnError: true)
+			
+			def adminUser = createAdminUser(school.adminUser.userid, school.adminUser.password)
+			
+			def schoolBean = new SocialGroup(name: school.name,
+											 groupType: SocialGroupType.SCHOOL,
+											 groupCategory: groupCategory,
+											 geo: city,
+											 address: address,
+											 admin: adminUser)
+											 .save(failOnError: true)
 			
 			// Social Groups: Groups
 			school.groups.each { group->
@@ -299,4 +308,20 @@ class SetupController {
 		
 		return userName
 	}
+
+	private def createAdminUser(String userId, String password) {
+		def studentRole = Role.findByAuthority('ROLE_ADMIN_SCHOOL') ?: new Role(authority: 'ROLE_ADMIN_SCHOOL').save(failOnError: true)
+		
+		def userName = new User(username: userId,
+							enabled: true,
+							password: password,
+							unencode: password)
+							.save(failOnError: true)
+		if (!userName.authorities.contains(studentRole)) {
+			UserRole.create userName, studentRole, true
+		}
+		
+		return userName
+	}
+	
 }

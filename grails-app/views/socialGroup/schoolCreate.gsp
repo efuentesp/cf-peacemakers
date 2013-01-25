@@ -123,6 +123,24 @@
 								</div>
 							</tb:controlGroup>
 							
+							<h4><g:message code="role.ROLE_ADMIN_SCHOOL.label" default="School Administrator"/></h4>
+
+							<tb:controlGroup name="user"
+											bean="user"
+											labelMessage="${g.message(code:"user.username.label", default:"User id")}"
+											error="${hasErrors(bean:user, field:'user', 'error')}"
+											errors="${g.renderErrors(bean:user, field:'user', as:'list')}">
+								<g:field type="text" name="user" id="user" class="input-medium" value="" autocomplete='off'/>
+							</tb:controlGroup>
+							
+							<tb:controlGroup name="password"
+											bean="user"
+											labelMessage="${g.message(code:"user.password.label", default:"Password")}"
+											error="${hasErrors(bean:user, field:'password', 'error')}"
+											errors="${g.renderErrors(bean:user, field:'password', as:'list')}">
+								<g:field type="text" name="password" id="password" class="input-medium" value="" autocomplete='off'/>
+							</tb:controlGroup>
+							
 							<div class="form-actions">
 								<button type="submit" class="btn btn-primary">
 									<i class="icon-ok icon-white"></i>
