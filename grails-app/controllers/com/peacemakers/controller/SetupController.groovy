@@ -242,7 +242,7 @@ class SetupController {
 				
 				// Surveys
 				group.surveysApplied.each { surveyApplied->
-					def survey = Survey.findByCode(surveyApplied.code)
+					def survey = Survey.findByName(surveyApplied.surveyName)
 					def surveyAppliedBean = new SurveyAssigned(sequence: surveyApplied.sequence, socialGroup: socialGroup, survey: survey).save(failOnError: true)
 					surveyApplied.surveyAnswers.each { answer->
 						println answer

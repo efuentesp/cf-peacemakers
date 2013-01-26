@@ -7,9 +7,9 @@ import com.peacemakers.domain.SociometricTestResult;
 
 class SociometricTestResultsService {
 
-    def getSummaryByGroupMember(SociometricTest test, SocialGroup group) {
+    def getSummaryByGroupMember(SociometricTest test, SocialGroup group, Integer maxPercentage = 30) {
 
-		def maxPercentage = 30
+		//def maxPercentage = 30
 		
 		// Get the Sociometric Criteria from a Sociometric Test
 		//def sociometricCriteria = SociometricCriteria.get(test.id)

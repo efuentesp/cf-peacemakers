@@ -5,7 +5,9 @@
 		<title><g:message code="sociometricTestResults.barChart.header" default="Bar Chart" /></title>
 		
 		<link rel="stylesheet" href="${resource(dir: 'fileupload/css', file: 'fileupload.css')}">
-		<link rel="stylesheet" href="${resource(dir: 'd3/css', file: 'd3.css')}"> 
+		<link rel="stylesheet" href="${resource(dir: 'd3/css', file: 'd3.css')}">
+		<link rel="stylesheet" href="${resource(dir: 'fuelux/css', file: 'fuelux.css')}">
+		
 	</head>
 	
 	<body>
@@ -22,13 +24,44 @@
 				<i class="icon-th"></i> <g:message code="sociometricTestResults.barChart.header" default="Bar Chart"/> <small><strong>${socialGroup?.parent.name} (${socialGroup?.stage.name}, ${socialGroup?.period.name} ${socialGroup.name})</strong></small>
 			</h1>
 		</div> <!-- page-header -->		
-	
-		<g:hiddenField id= "socialGroup" name="socialGroup" value="${socialGroup.id}" />
-		<!--<g:hiddenField id= "sociometricTest" name="sociometricTest" value="${socialGroup.id}" />-->
 		
 		<div>		
 			
 			<g:render template="submenu"/>
+
+		<fieldset>
+			<g:form action="barChart" method="post" class="form-inline">
+	
+				<g:hiddenField id= "socialGroup" name="socialGroup" value="${socialGroup.id}" />
+				<g:hiddenField id= "id" name="id" value="${socialGroup.id}" />
+				
+				<!-- <input type="text" name="maxPercentage" value="30" maxlength="3" required id="maxPercentage" class="input-mini spinner-input" > -->
+				
+				<div class="fuelux">
+				    <div id="ex-spinner" class="spinner">
+				    	<div class="input-append">
+					    	<input type="text"  id="maxPercentage"  name="maxPercentage" value="${params.maxPercentage}" required class="input-mini spinner-input numbersOnly" maxlength="3" autocomplete='off'>
+					    	<span class="add-on">%</span>
+					    </div>
+					   	<!-- 
+					    <div class="spinner-buttons btn-group btn-group-vertical">
+						    <button class="btn spinner-up">
+						    <i class="icon-chevron-up"></i>
+						    </button>
+						    <button class="btn spinner-down">
+						    <i class="icon-chevron-down"></i>
+						    </button>
+					    </div>
+					    -->
+				    </div>
+			    </div>
+				<button type="submit" class="btn btn-small btn-success">
+					<i class="icon-refresh icon-white"></i>
+					<g:message code="sociometricTestResults.button.update.label" default="Update Results"/>
+				</button>			    				
+
+			</g:form>
+		</fieldset>
 			
 			<g:each in="${sociometricTestResults}" var="criteria">
 			<div class="sociometricCriteria">
@@ -74,7 +107,7 @@
 			</div>
 			</g:each>
 			
-		</div>		
-	
+		</div>
+		
 	</body>
 </html>

@@ -153,7 +153,7 @@ class SociometricTestResultsController {
 			def testArray = []
 			sociometricTests.each { test->
 				println "    Sociometric Test => ${test}"
-				def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup)
+				def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup, params.maxPercentage.toInteger())
 				println "       Sociometric Test Results => ${socialGroupResults.detail}"
 				testArray << [test: test, results: socialGroupResults.detail]
 			}
