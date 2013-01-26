@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main">
-		<title><g:message code="survey.question.answerChoice.create.header" default="Create Survey Answer Choice" /></title>
+		<title><g:message code="survey.question.answerChoice.delete.header" default="Delete Survey Answer Choice" /></title>
 	</head>
 	
 	<body>
@@ -12,8 +12,8 @@
 			<!-- Page Header -->
 			<div class="page-header">
 				<h1>
-					<i class="icon-check"></i>  <g:message code="survey.question.answerChoice.create.header" default="Create Survey Answer Choice"/>
-					<small><strong>${surveyQuestion.description}</strong></small>
+					<i class="icon-check"></i>  <g:message code="survey.question.answerChoice.delete.header" default="Delete Survey Answer Choice"/>
+					<small><strong>${surveyAnswerChoice.question.description}</strong></small>
 				</h1>
 			</div> <!-- page-header -->
 			<p></p>
@@ -26,11 +26,11 @@
 				</div>
 			</g:if>
 
-			<g:hasErrors bean="${surveyQuestion}">
+			<g:hasErrors bean="${surveyAnswerChoice}">
 				<div class="alert alert-block alert-error">
 					<a class="close" data-dismiss="alert">&times;</a>
 					<ul>
-						<g:eachError bean="${surveyQuestion}" var="error">
+						<g:eachError bean="${surveyAnswerChoice}" var="error">
 						<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>
 							<g:message error="${error}"/>
 						</li>
@@ -41,26 +41,17 @@
 	
 			<!-- Form -->
 			<fieldset>
-				<g:form action="save" method="post" class="form-horizontal">
+				<g:form action="remove" method="post" class="form-horizontal">
 					
-					<g:hiddenField name="surveyQuestion" value="${surveyQuestion.id}" />
-					
-					<!-- 
-					<tb:controlGroup name="code"
-									bean="surveyAnswerChoiceBean"
-									labelMessage="${g.message(code:"survey.question.answerChoice.code.label", default:"Code")}"
-									error="${hasErrors(bean: surveyAnswerChoiceBean, field: 'code', 'error')}"
-									errors="${g.renderErrors(bean: surveyAnswerChoiceBean, field: 'code', as:'list')}">
-						<g:field type="text" name="code" id="code" class="input-medium" required="" value="" autocomplete='off'/>
-					</tb:controlGroup>
-					-->
+					<g:hiddenField name="id" value="${surveyAnswerChoice?.id}" />
+					<g:hiddenField name="version" value="${surveyAnswerChoice?.version}" />
 					
 					<tb:controlGroup name="description"
 									bean="surveyAnswerChoiceBean"
 									labelMessage="${g.message(code:"survey.question.answerChoice.description.label", default:"Description")}"
 									error="${hasErrors(bean: surveyAnswerChoiceBean, field: 'description', 'error')}"
 									errors="${g.renderErrors(bean: surveyAnswerChoiceBean, field: 'description', as:'list')}">
-						<g:field type="text" name="description" id="description" class="input-xxlarge" required="" value="" autocomplete='off'/>
+						<span class="input-xxlarge uneditable-input">${surveyAnswerChoice.description}</span>
 					</tb:controlGroup>
 					
 					<tb:controlGroup name="points"
@@ -68,15 +59,15 @@
 									labelMessage="${g.message(code:"survey.question.answerChoice.points.label", default:"Points")}"
 									error="${hasErrors(bean: surveyAnswerChoiceBean, field: 'points', 'error')}"
 									errors="${g.renderErrors(bean: surveyAnswerChoiceBean, field: 'points', as:'list')}">
-						<g:field type="text" name="points" id="points" class="input-small" required="" value="" autocomplete='off'/>
+						<span class="input-small uneditable-input">${surveyAnswerChoice.points}</span>
 					</tb:controlGroup>
 					
 					<div class="form-actions">
-						<button type="submit" class="btn btn-primary">
-							<i class="icon-ok icon-white"></i>
-							<g:message code="default.button.create.label" default="Save"/>
+						<button type="submit" class="btn btn-danger">
+							<i class="icon-trash icon-white"></i>
+							<g:message code="default.button.delete.label" default="Delete"/>
 						</button>
-						<a href="${createLink(uri: "/surveyAnswerChoice/list")}/${surveyQuestion.id}" class="btn">
+						<a href="${createLink(uri: "/surveyAnswerChoice/list")}/${surveyAnswerChoice.question.id}" class="btn">
 							<i class="icon-ban-circle"></i>
 							<g:message code="default.button.cancel.label" default="Cancel"/>
 						</a> <!-- /btn -->							

@@ -1,5 +1,7 @@
 package com.peacemakers.controller
 
+import org.springframework.dao.DataIntegrityViolationException;
+
 import grails.plugins.springsecurity.Secured;
 
 import com.peacemakers.domain.SurveyAnswerChoice;
@@ -37,7 +39,29 @@ class SurveyAnswerChoiceController {
 		
 		[surveyQuestion: surveyQuestion, user: user]
 	}
-	
+
+	def edit() {
+		println "edit: ${params}"
+		
+		// Get User signed in
+		def user = User.get(springSecurityService.principal.id)
+		
+		def surveyAnswerChoice = SurveyAnswerChoice.get(params.id)
+		
+		[surveyAnswerChoice: surveyAnswerChoice, user: user]
+	}
+
+	def delete() {
+		println "delete: ${params}"
+		
+		// Get User signed in
+		def user = User.get(springSecurityService.principal.id)
+		
+		def surveyAnswerChoice = SurveyAnswerChoice.get(params.id)
+		
+		[surveyAnswerChoice: surveyAnswerChoice, user: user]
+	}
+			
 	def save() {
 		println "save: ${params}"
 		
@@ -56,4 +80,59 @@ class SurveyAnswerChoiceController {
 		flash.message = message(code: 'default.created.message', args: [message(code: 'survey.question.label', default: 'Survey Question'), surveyQuestion.id])
 		redirect(action: "list", params: [id: params.surveyQuestion])
 	}
+	
+	def update() {
+		println "update: ${params}"
+		
+		def surveyAnswerChoice = SurveyAnswerChoice.get(params.id.toLong())
+		if (!surveyAnswerChoice) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice'), params.id])
+			redirect(action: "list", id: surveyAnswerChoice.question.id)
+			return
+		}
+
+		if (params.version) {
+			def version = params.version.toLong()
+			if (surveyAnswerChoice.version > version) {
+				surveyAnswerChoice.errors.rejectValue("version", "default.optimistic.locking.failure",
+						  [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice')] as Object[],
+						  "Another user has updated this Survey Answer Choice while you were editing")
+				render(view: "edit", model: [surveyAnswerChoice: surveyAnswerChoice])
+				return
+			}
+		}
+
+		surveyAnswerChoice.description = params.description
+		surveyAnswerChoice.points = params.points.toInteger()
+
+		if (!surveyAnswerChoice.save(flush: true)) {
+			render(view: "edit", model: [surveyAnswerChoice: surveyAnswerChoice])
+			return
+		}
+
+		flash.message = message(code: 'default.updated.message', args: [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice'), surveyAnswerChoice.id])
+		redirect(action: "list", id: surveyAnswerChoice.question.id)
+	}
+
+	def remove() {
+		println "remove: ${params}"
+		
+		def surveyAnswerChoice = SurveyAnswerChoice.get(params.id)
+		if (!surveyAnswerChoice) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice'), params.id])
+			redirect(action: "list", id: surveyAnswerChoice.question.id)
+			return
+		}
+
+		try {
+			surveyAnswerChoice.delete(flush: true)
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice'), params.id])
+			redirect(action: "list", id: surveyAnswerChoice.question.id)
+		}
+		catch (DataIntegrityViolationException e) {
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'surveyAnswerChoice.label', default: 'Survey Answer Choice'), params.id])
+			redirect(action: "delete", id: params.id)
+		}
+	}
+
 }

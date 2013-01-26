@@ -51,7 +51,7 @@
 					<div class="form-actions">
 						<button type="submit" class="btn btn-success">
 							<i class="icon-ok icon-white"></i>
-							<g:message code="default.button.update.label" default="Edit"/>
+							<g:message code="default.button.update.label" default="Update"/>
 						</button>
 						<a href="${createLink(uri: "/geography/${action}List")}" class="btn">
 							<i class="icon-ban-circle"></i>
