@@ -22,7 +22,9 @@ class SurveyAnswerChoiceController {
 				
 		def surveyQuestion = SurveyQuestion.get(params.id)
 		
-		[surveyQuestion: surveyQuestion, user: user]
+		def surveyAnswerChoices = SurveyAnswerChoice.findAllByQuestion(surveyQuestion)
+		
+		[surveyQuestion: surveyQuestion, surveyAnswerChoices: surveyAnswerChoices, user: user]
 	}
 	
 	def create() {
@@ -41,7 +43,11 @@ class SurveyAnswerChoiceController {
 		
 		def surveyQuestion = SurveyQuestion.get(params.surveyQuestion)
 				
-		def surveyAnswerChoice = new SurveyAnswerChoice(sequence: 0, code: params.code, description: params.description, points: params.points)
+		// Get last answer choice
+		def sequence =  SurveyAnswerChoice.getNextSequence(params.surveyQuestion.toLong())
+		
+		//def surveyAnswerChoice = new SurveyAnswerChoice(sequence: 0, code: params.code, description: params.description, points: params.points)
+		def surveyAnswerChoice = new SurveyAnswerChoice(sequence: sequence, description: params.description, points: params.points)
 		if (!surveyQuestion.addToChoices(surveyAnswerChoice).save(flush: true)) {
 			render(view: "create", model: [surveyQuestion: surveyQuestion])
 			return

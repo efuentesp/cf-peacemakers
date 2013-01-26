@@ -11,7 +11,7 @@
 
 		<!-- TODO: Show a message when table is empty -->
 
-		<g:each in="${surveyQuestion.choices}" var="choice">
+		<g:each in="${surveyAnswerChoices}" var="choice">
 		<tr>
 			<td>${choice.sequence}</td>
 			<td>${choice.description}</td>

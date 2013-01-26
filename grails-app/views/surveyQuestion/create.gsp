@@ -45,6 +45,7 @@
 					
 					<g:hiddenField name="survey" value="${survey.id}" />
 					
+					<!-- 
 					<tb:controlGroup name="code"
 									bean="surveyQuestionBean"
 									labelMessage="${g.message(code:"survey.question.code.label", default:"Code")}"
@@ -52,6 +53,7 @@
 									errors="${g.renderErrors(bean: surveyQuestionBean, field: 'code', as:'list')}">
 						<g:field type="text" name="code" id="code" class="input-medium" required="" value="" autocomplete='off'/>
 					</tb:controlGroup>
+					-->
 					
 					<tb:controlGroup name="description"
 									bean="surveyQuestionBean"

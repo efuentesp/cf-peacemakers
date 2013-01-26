@@ -36,7 +36,8 @@ class SurveyController {
 	def save() {
 		println "save: ${params}"
 		
-		def survey = new Survey(code: params.code, name: params.name)
+		//def survey = new Survey(code: params.code, name: params.name)
+		def survey = new Survey(name: params.name)
 		if (!survey.save(flush: true)) {
 			render(view: "create", model: [surveyBean: survey])
 			return

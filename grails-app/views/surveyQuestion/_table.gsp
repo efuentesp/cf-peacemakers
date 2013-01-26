@@ -11,11 +11,11 @@
 
 		<!-- TODO: Show a message when table is empty -->
 
-		<g:each in="${survey.questions}" var="question">
+		<g:each in="${surveyQuestions}" var="question">
 		<tr>
 			<td>${question.sequence}</td>
 			<td>${question.description}</td>
-			<td><g:message code="survey.question.type.${question.type}.label" default="Type"/></td>
+			<!-- <td><g:message code="survey.question.type.${question.type}.label" default="Type"/></td> -->
 
 			<td class="link">
 				<div class="btn-toolbar" style="margin: 0;">

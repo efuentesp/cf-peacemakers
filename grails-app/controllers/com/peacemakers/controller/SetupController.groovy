@@ -124,15 +124,18 @@ class SetupController {
 		println json
 
 		json.surveys.each { survey->
-			def surveyBean = new Survey(code: survey.code, name: survey.name).save(failOnError: true)
+			//def surveyBean = new Survey(code: survey.code, name: survey.name).save(failOnError: true)
+			def surveyBean = new Survey(name: survey.name).save(failOnError: true)
 			
 			survey.questions.each { question->
 				//println question
 				
-				def q = new SurveyQuestion(sequence: question.sequence, description: question.description, code: question.code, type: QuestionType.MULTI_CHOICE, externalId: question.id)
+				//def q = new SurveyQuestion(sequence: question.sequence, description: question.description, code: question.code, type: QuestionType.MULTI_CHOICE, externalId: question.id)
+				def q = new SurveyQuestion(sequence: question.sequence, description: question.description, type: QuestionType.MULTI_CHOICE, externalId: question.id)
 				
 				question.answerChoices.each { answer->
-					q.addToChoices(new SurveyAnswerChoice(sequence: answer.sequence, code: answer.code, description: answer.description, points: answer.points, externalId: answer.id))
+					//q.addToChoices(new SurveyAnswerChoice(sequence: answer.sequence, code: answer.code, description: answer.description, points: answer.points, externalId: answer.id))
+					q.addToChoices(new SurveyAnswerChoice(sequence: answer.sequence, description: answer.description, points: answer.points, externalId: answer.id))
 				}
 				
 				surveyBean.addToQuestions(q).save(failOnError: true)

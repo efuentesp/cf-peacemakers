@@ -1,5 +1,7 @@
 package com.peacemakers.domain
 
+import com.peacemakers.security.UserRole;
+
 private enum QuestionType {
 	MULTI_CHOICE ('MULTI_CHOICE'),
 	MULTIPLE_CORRECT ('MULTIPLE_CORRECT'),
@@ -18,18 +20,27 @@ class SurveyQuestion {
 	static belongsTo = [survey: Survey]
 	static hasMany = [choices: SurveyAnswerChoice]
 	
-	String code
+	//String code
 	Integer sequence
 	String description
 	QuestionType type
 	Long externalId
 
     static constraints = {
-		code(unique: true)
+		//code(unique: true)
 		externalId(nullable: true)
     }
 	
 	static mapping = {
 		sort "sequence"
+	}
+	
+	static Integer getNextSequence(long surveyId) {
+		def last = find 'from SurveyQuestion where survey.id=:surveyId order by sequence desc', [surveyId: surveyId]
+		if (last) {
+			return last.sequence + 1
+		} else {
+			return 1
+		}
 	}
 }

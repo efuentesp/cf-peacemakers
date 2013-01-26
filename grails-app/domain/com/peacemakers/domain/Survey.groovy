@@ -4,11 +4,11 @@ class Survey {
 	
 	static hasMany = [questions: SurveyQuestion]
 	
-	String code
+	//String code
 	String name
 
     static constraints = {
-		code(unique: true)
+		//code(unique: true)
 		questions(nullable: true)
     }
 }

@@ -41,7 +41,8 @@
 			<!-- Form -->
 			<fieldset>
 				<g:form action="save" method="post" class="form-horizontal">
-						
+					
+					<!-- 	
 					<tb:controlGroup name="code"
 									bean="surveyBean"
 									labelMessage="${g.message(code:"survey.code.label", default:"Code")}"
@@ -49,6 +50,7 @@
 									errors="${g.renderErrors(bean: surveyBean, field: 'code', as:'list')}">
 						<g:field type="text" name="code" id="code" class="input-medium" required="" value="" autocomplete='off'/>
 					</tb:controlGroup>
+					-->
 					
 					<tb:controlGroup name="name"
 									bean="surveyBean"
