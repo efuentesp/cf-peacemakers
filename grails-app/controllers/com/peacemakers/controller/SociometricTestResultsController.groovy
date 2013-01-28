@@ -143,6 +143,13 @@ class SociometricTestResultsController {
 			}
 		}
 		
+		def maxPercentage = 30
+		if (params.maxPercentage) {
+			maxPercentage = params.maxPercentage.toInteger()
+		} else {
+			maxPercentage = 30
+		}
+		
 		def testResults = []
 		sociometricCriteriaArray.each { criteria->
 			println "Sociometric Criteria => ${criteria}"
@@ -153,7 +160,7 @@ class SociometricTestResultsController {
 			def testArray = []
 			sociometricTests.each { test->
 				println "    Sociometric Test => ${test}"
-				def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup, params.maxPercentage.toInteger())
+				def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup, maxPercentage.toInteger())
 				println "       Sociometric Test Results => ${socialGroupResults.detail}"
 				testArray << [test: test, results: socialGroupResults.detail]
 			}
@@ -161,7 +168,7 @@ class SociometricTestResultsController {
 		}
 		println ">> Test results : ${testResults}"
 		
-		[socialGroup: socialGroup, sociometricTestResults: testResults, user: user, action: params.action]
+		[socialGroup: socialGroup, sociometricTestResults: testResults, user: user, maxPercentage: maxPercentage, action: params.action]
 	}
 	
 	def jqPlotBarChart() {
@@ -186,7 +193,7 @@ class SociometricTestResultsController {
 			}
 		}
 		
-		[socialGroup: socialGroup, sociometricCriterias: sociometricCriteriaArray, user: user, action: params.action]
+		[socialGroup: socialGroup, sociometricCriterias: sociometricCriteriaArray, maxPercentage: params.maxPercentage, user: user, action: params.action]
 	}
 	
 	def piejson() {
@@ -207,14 +214,21 @@ class SociometricTestResultsController {
 			criteriaResponses << [ id: criteriaResponse.id ]
 		}
 		//println "series: ${series}"
-		
+
+		def maxPercentage = 30
+		if (params.maxPercentage) {
+			maxPercentage = params.maxPercentage.toInteger()
+		} else {
+			maxPercentage = 30
+		}
+				
 		def ticks = [],
 			matrix = new Object[criteriaResponses.size()][sociometricTests.size()],
 			percentage = new Object[criteriaResponses.size()][sociometricTests.size()],
 			t = 0
 		sociometricTests.each { test ->
-			def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup)
-			//println "test: ${test}, socialGroup: ${socialGroup}"
+			def socialGroupResults = SociometricTestResultsService.getSummaryByGroupMember(test, socialGroup, maxPercentage)
+			//println "++++ test: ${test}, socialGroup: ${socialGroup}"
 			socialGroupResults.summary.each { result->
 				//println result
 				def criteriaResponse = criteriaResponses.findIndexOf {
@@ -228,7 +242,7 @@ class SociometricTestResultsController {
 			ticks << g.message(code: 'sociometricTest.list.header', default: 'Test') + ' ' + test.sequence
 			t++
 		}
-		println "matrix: ${matrix}"
+		//println "matrix: ${matrix}"
 		//println "ticks: ${ticks}"
 
 		def series = [], res=0
@@ -237,7 +251,7 @@ class SociometricTestResultsController {
 						pointLabels: [labels: percentage[res]],
 						color: criteriaResponse.rgbHex
 					  ]
-			println ":: ${percentage[res]}"
+			//println ":: ${percentage[res]}"
 			res++
 		}
 		//println "series: ${series}"
@@ -265,7 +279,7 @@ class SociometricTestResultsController {
 						    ]
 				] */
 		
-		println ">> Results to Chart: ${r as JSON}"
+		//println ">> Results to Chart: ${r as JSON}"
 		
 		render r as JSON
 	}

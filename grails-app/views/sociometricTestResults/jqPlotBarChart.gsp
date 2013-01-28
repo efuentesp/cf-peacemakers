@@ -5,6 +5,18 @@
 		<title><g:message code="sociometricTestResults.pieChart.header" default="Bar Chart" /></title>
 		
 		<link rel="stylesheet" href="${resource(dir: 'jqplot/css', file: 'jquery.jqplot.min.css')}">
+		<link rel="stylesheet" href="${resource(dir: 'fuelux/css', file: 'fuelux.css')}">
+		
+		<style type="text/css">
+			.sociometricCriteria .jqplot-point-label {
+				//border: 1.5px solid #aaaaaa;
+				//padding: 1px 3px;
+				//background-color: #eeccdd;
+				color: white;
+				font-size: 12px; 
+			}
+		</style>	
+	
 	</head>
 	
 	<body>
@@ -22,10 +34,43 @@
 			</h1>
 		</div> <!-- page-header -->		
 			
-		<div>		
-			
-			<g:hiddenField id= "socialGroupId" name="socialGroupId" value="${socialGroup.id}" />
+		<div>					
 			<g:render template="submenu"/>				
+
+			<fieldset>
+				<g:form action="jqPlotBarChart" method="post" class="form-inline">
+		
+					<g:hiddenField id= "socialGroupId" name="socialGroupId" value="${socialGroup.id}" />
+					<g:hiddenField id= "id" name="id" value="${socialGroup.id}" />
+					
+					<!-- <input type="text" name="maxPercentage" value="30" maxlength="3" required id="maxPercentage" class="input-mini spinner-input" > -->
+					
+					<div class="fuelux">
+					    <div id="ex-spinner" class="spinner">
+					    	<div class="input-append">
+						    	<input type="text"  id="maxPercentage"  name="maxPercentage" value="${params.maxPercentage}" required class="input-mini spinner-input numbersOnly" maxlength="3" autocomplete='off'>
+						    	<span class="add-on">%</span>
+						    </div>
+						   	<!-- 
+						    <div class="spinner-buttons btn-group btn-group-vertical">
+							    <button class="btn spinner-up">
+							    <i class="icon-chevron-up"></i>
+							    </button>
+							    <button class="btn spinner-down">
+							    <i class="icon-chevron-down"></i>
+							    </button>
+						    </div>
+						    -->
+					    </div>
+						<button type="submit" class="btn btn-small btn-success">
+							<i class="icon-refresh icon-white"></i>
+							<g:message code="sociometricTestResults.button.update.label" default="Update Results"/>
+						</button>	
+				    </div>
+		    				
+	
+				</g:form>
+			</fieldset>
 			
 			<g:each in="${sociometricCriterias}" var="sociometricCriteria">
 				<div id="${sociometricCriteria.code}" class="sociometricCriteria" data-id="${sociometricCriteria.id}" style="width:600px; height:250px;"></div>
@@ -40,7 +85,8 @@
 				    // Ticks should match up one for each y value (category) in the series.
 				    //var ticks = ['1ra Votación', '2da Votación', '3ra Votación'];
 
-				    var socialGroupId = $('#socialGroupId').attr('value'); 
+				    var socialGroupId = $('#socialGroupId').attr('value');
+				    var maxPercentage = $('#maxPercentage').attr('value');
 				    
 				    $('.sociometricCriteria').each(function(i) {
 					    var sociometricCriteriaCd = $(this).attr('id');
@@ -51,9 +97,9 @@
 				    
 					    $.ajax({
 					      async: false,
-					      //url: "/cf-peacemakers/sociometricTestResults/piejson",
-					      url: "/sociometricTestResults/piejson",
-					      data: { criteria: sociometricCriteriaId, group: socialGroupId },
+					      url: "/cf-peacemakers/sociometricTestResults/piejson",
+					      //url: "/sociometricTestResults/piejson",
+					      data: { criteria: sociometricCriteriaId, group: socialGroupId, maxPercentage: maxPercentage },
 					      dataType:"json",
 					      success: function(data) {
 					    		
@@ -64,7 +110,8 @@
 							        seriesDefaults:{
 							            renderer:$.jqplot.BarRenderer,
 							            rendererOptions: { fillToZero: true },
-							            pointLabels: { show: true }
+							            //pointLabels: { show: true, location: 's', edgeTolerance: -50 }
+							            pointLabels: { show: true, location: 's' }
 							        },
 							        // Custom labels for the series are specified with the "label"
 							        // option on the series option.  Here a series option object
@@ -77,6 +124,10 @@
 							        legend: {
 							            show: true,
 							            placement: 'outsideGrid'
+							        },
+							        highlighter: {
+							            show: true,
+							            sizeAdjust: 7.5
 							        },
 							        axes: {
 							            // Use a category axis on the x axis and use our custom ticks.

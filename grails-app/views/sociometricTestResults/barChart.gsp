@@ -28,86 +28,88 @@
 		<div>		
 			
 			<g:render template="submenu"/>
-
-		<fieldset>
-			<g:form action="barChart" method="post" class="form-inline">
 	
-				<g:hiddenField id= "socialGroup" name="socialGroup" value="${socialGroup.id}" />
-				<g:hiddenField id= "id" name="id" value="${socialGroup.id}" />
-				
-				<!-- <input type="text" name="maxPercentage" value="30" maxlength="3" required id="maxPercentage" class="input-mini spinner-input" > -->
-				
-				<div class="fuelux">
-				    <div id="ex-spinner" class="spinner">
-				    	<div class="input-append">
-					    	<input type="text"  id="maxPercentage"  name="maxPercentage" value="${params.maxPercentage}" required class="input-mini spinner-input numbersOnly" maxlength="3" autocomplete='off'>
-					    	<span class="add-on">%</span>
+			<fieldset>
+				<g:form action="barChart" method="post" class="form-inline">
+		
+					<g:hiddenField id= "socialGroup" name="socialGroup" value="${socialGroup.id}" />
+					<g:hiddenField id= "id" name="id" value="${socialGroup.id}" />
+					
+					<!-- <input type="text" name="maxPercentage" value="30" maxlength="3" required id="maxPercentage" class="input-mini spinner-input" > -->
+					
+					<div class="fuelux">
+					    <div id="ex-spinner" class="spinner">
+					    	<div class="input-append">
+						    	<input type="text"  id="maxPercentage"  name="maxPercentage" value="${params.maxPercentage}" required class="input-mini spinner-input numbersOnly" maxlength="3" autocomplete='off'>
+						    	<span class="add-on">%</span>
+						    </div>
+						   	<!-- 
+						    <div class="spinner-buttons btn-group btn-group-vertical">
+							    <button class="btn spinner-up">
+							    <i class="icon-chevron-up"></i>
+							    </button>
+							    <button class="btn spinner-down">
+							    <i class="icon-chevron-down"></i>
+							    </button>
+						    </div>
+						    -->
 					    </div>
-					   	<!-- 
-					    <div class="spinner-buttons btn-group btn-group-vertical">
-						    <button class="btn spinner-up">
-						    <i class="icon-chevron-up"></i>
-						    </button>
-						    <button class="btn spinner-down">
-						    <i class="icon-chevron-down"></i>
-						    </button>
-					    </div>
-					    -->
+						<button type="submit" class="btn btn-small btn-success">
+							<i class="icon-refresh icon-white"></i>
+							<g:message code="sociometricTestResults.button.update.label" default="Update Results"/>
+						</button>	
 				    </div>
-			    </div>
-				<button type="submit" class="btn btn-small btn-success">
-					<i class="icon-refresh icon-white"></i>
-					<g:message code="sociometricTestResults.button.update.label" default="Update Results"/>
-				</button>			    				
-
-			</g:form>
-		</fieldset>
-			
+		    				
+	
+				</g:form>
+			</fieldset>
+				
 			<g:each in="${sociometricTestResults}" var="criteria">
-			<div class="sociometricCriteria">
-				Tipo de Votación: ${criteria.criteria.name}
-				<g:each in="${criteria.tests}" var="test">
-				<div class="row-fluid">
-				<div class="sociometricTest">
-					<p>Votación ${test.test.sequence}</p>
-					<ul class="vote-list">
-					<g:each in="${test.results}" var="member">
-					<g:if test="${member.results.size() > 0}">
-					<li>
-					<div class="groupMember">
+				<div>
+					<h3>Tipo de Votación: ${criteria.criteria.name}</h3>
+					<g:each in="${criteria.tests}" var="test">
 						<div>
-							<div class="groupMemberPhoto">
-								<img class="photo" src="${createLink(controller: 'GroupMember', action: 'renderPhoto', id: member.groupMember.id)}"/>
-							</div>
-							<div class="groupMemberFullName">
-								<h4>${member.groupMember}</h4>
+							<div id="cardlist">
+								<h4>Votación ${test.test.sequence}</h4>
+								<ul id="grid">
+									<g:each in="${test.results}" var="member">
+										<g:if test="${member.results.size() > 0}">
+											<li class="card">
+												<div class="cell">
+	
+													<div class="image-photo">
+														<img src="${createLink(controller: 'GroupMember', action: 'renderPhoto', id: member.groupMember.id)}"/>
+													</div>
+													<div>
+														<h5>${member.groupMember}</h5>
+													</div>
+													<div>
+														<ul>
+															<g:each in="${member.results}" var="result">
+																<li>
+																	<label>
+																		<g:message code="${result.criteriaResponse.question}" default="${result.criteriaResponse.question}"/>
+																	</label>
+																	<tb:progressBar value="${result.percentage}" color="${result.criteriaResponse.rgbHex}"></tb:progressBar>
+																	<br>									
+																</li>
+															</g:each>
+														</ul>
+														<br>
+													</div>
+												</div>
+											</li>
+										</g:if>
+									</g:each>
+								</ul>
 							</div>
 						</div>
-						<div class="sociometricTestResults">
-							<ul>
-							<g:each in="${member.results}" var="result">
-								<li>
-									<label>
-										<g:message code="${result.criteriaResponse.question}" default="${result.criteriaResponse.question}"/>
-									</label>
-									<tb:progressBar value="${result.percentage}" color="${result.criteriaResponse.rgbHex}"></tb:progressBar>									
-								</li>
-							</g:each>
-							</ul>
-							<br>
-						</div>
-					</div>
-					</li>
-					</g:if>
 					</g:each>
-					</ul>
 				</div>
-				</div>
-				</g:each>
-			</div>
 			</g:each>
-			
+				
 		</div>
+
 		
 	</body>
 </html>

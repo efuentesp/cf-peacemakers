@@ -22,13 +22,16 @@ ul.vote-list {
   margin: 0;
   list-style: none;
   //width: 800px;
-  height: auto;
+  //height: auto;
   //position: relative;
   //z-index: 10;
 }
 
 ul.vote-list li {
   //display:inline;
+  background-color: white;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   width: 220px;
   height: auto;
   float: left;
@@ -52,4 +55,40 @@ div.student-name {
 
 div.student-photo {
 	text-align: center;
+}
+
+#cardlist {
+	position: relative;
+}
+
+#cardlist ul#grid {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    position: absolute;	
+}
+
+#cardlist li.card {
+  //display:inline;
+  background-color: white;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  width: 220px;
+  height: 320px;
+  float: left;
+  border: 1px solid #999;
+  margin: 0 15px 15px 0;
+  padding: 5px;	
+}
+
+#cardlist li.item .cell {
+    padding: 9px 9px 7px;
+}
+
+.image-photo {
+    //display: inline-block;
+    //max-width: 100%;
+    //position: relative;
+    //horizontal-align: middle;
+    //vertical-align: bottom;
 }
