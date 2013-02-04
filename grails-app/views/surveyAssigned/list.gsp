@@ -3,6 +3,7 @@
 	<head>
 		<meta name="layout" content="simple">
 		<title><g:message code="surveyAssigned.label" default="Survey Assigned" /></title>
+		<link rel="stylesheet" href="${resource(dir: 'fileupload/css', file: 'fileupload.css')}">
 	</head>
 	
 	<body>

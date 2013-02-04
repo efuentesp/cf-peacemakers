@@ -13,7 +13,7 @@ import com.sun.j3d.utils.scenegraph.io.state.javax.media.j3d.LinkState;
 import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured;
 
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_ADMIN', 'ROLE_ADMIN_SCHOOL'])
 class SociometricTestResultsController {
 	def SocialGroupService
 	def SociometricTestResultsService

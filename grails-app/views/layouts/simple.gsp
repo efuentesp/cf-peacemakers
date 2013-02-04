@@ -50,21 +50,18 @@
 				    	<g:message code="default.brand.name" default="The Peacemaker Program 2.0"/>
 				    </a> <!-- /brand -->
 				    
+				    <g:if test="${user}">
 				    <div class="nav-collapse">						
 						<ul class="nav pull-right">
 							<li>
 						    	<a href="#">
 						    		<i class="icon-user icon-white"></i>
-						    		<g:if test="${user}">
-						    			${user.username}
-						    		</g:if>
-						    		<g:else>
-						    			<g:message code="default.navbar.user" default="User"/>
-						    		</g:else>
+						    		${user.username}
 						    	</a>
 						    </li>
 						</ul> <!-- /nav pull-right-->
 					</div> <!-- /nav-collapse -->
+					</g:if>
 					
 				</div> <!-- /container-fluid -->
 			</div> <!-- /navbar-inner -->

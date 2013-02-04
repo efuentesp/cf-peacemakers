@@ -58,14 +58,15 @@ div.student-photo {
 }
 
 #cardlist {
-	position: relative;
+	//position: relative;
+	 clear: both;
 }
 
 #cardlist ul#grid {
     list-style: none outside none;
     margin: 0;
     padding: 0;
-    position: absolute;	
+    //position: absolute;	
 }
 
 #cardlist li.card {
@@ -74,7 +75,7 @@ div.student-photo {
   border-radius: 6px 6px 6px 6px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   width: 220px;
-  height: 320px;
+  height: 330px;
   float: left;
   border: 1px solid #999;
   margin: 0 15px 15px 0;
@@ -91,4 +92,11 @@ div.student-photo {
     //position: relative;
     //horizontal-align: middle;
     //vertical-align: bottom;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    display: block;
+    line-height: 1;
+    padding: 4px;    
 }
+

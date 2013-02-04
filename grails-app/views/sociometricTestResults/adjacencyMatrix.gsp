@@ -1,7 +1,12 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<meta name="layout" content="main">
+		</sec:ifAllGranted>
+		<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+			<meta name="layout" content="schoolAdmin">
+		</sec:ifAllGranted>
 		<title><g:message code="sociometricTestResults.adjacencyMatrix.header" default="Adjacency Matrix" /></title>
 		
 		<style>

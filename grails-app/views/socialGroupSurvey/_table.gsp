@@ -15,7 +15,7 @@
 		<tr>
 			<td>${surveyAssigned.sequence}</td>
 			<td>
-				<g:message code="${surveyAssigned?.survey.code}" default="${surveyAssigned?.survey.name}"/>
+				${surveyAssigned?.survey.name}
 				<span class="badge badge-info">${surveyAssigned?.answers.size()}</span>
 			</td>
 			<td>

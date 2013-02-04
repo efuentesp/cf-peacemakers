@@ -7,8 +7,9 @@ class UrlMappings {
 			}
 		}
 
-		"/"(controller: "/student")
+		"/"(controller: "/home")
 		"/admin"(controller: '/socialGroup')
+		"/school"(controller: '/schoolAdmin')
 		"500"(view:'/error')
 	}
 }

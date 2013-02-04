@@ -1,15 +1,25 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<meta name="layout" content="main">
+		</sec:ifAllGranted>
+		<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+			<meta name="layout" content="schoolAdmin">
+		</sec:ifAllGranted>
 		<title><g:message code="groupMember.create.header" default="Create Student" /></title>
 	</head>
 	
 	<body>
 	
 		<ul class="breadcrumb">
-			<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${socialGroupSelected?.parent?.geo.id}&country=${socialGroupSelected?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
-			<li><a href="${createLink(uri: "/socialGroup/groupList?school=${socialGroupSelected?.parent.id}&stage=${socialGroupSelected?.stage.id}&period=${socialGroupSelected?.period.id}&city=${socialGroupSelected?.parent?.geo.id}&country=${socialGroupSelected?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			<sec:ifAllGranted roles="ROLE_ADMIN">
+				<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${socialGroupSelected?.parent?.geo.id}&country=${socialGroupSelected?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
+				<li><a href="${createLink(uri: "/socialGroup/groupList?school=${socialGroupSelected?.parent.id}&stage=${socialGroupSelected?.stage.id}&period=${socialGroupSelected?.period.id}&city=${socialGroupSelected?.parent?.geo.id}&country=${socialGroupSelected?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
+			<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+				<li><a href="${createLink(uri: "/schoolAdmin/groupList?school=${socialGroupSelected?.parent.id}&stage=${socialGroupSelected?.stage.id}&period=${socialGroupSelected?.period.id}&city=${socialGroupSelected?.parent?.geo.id}&country=${socialGroupSelected?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
 			<li><a href="${createLink(uri: "/groupMember/list/${socialGroupSelected.id}")}"><g:message code="groupMember.list.header" default="Group Member" /></a> <span class="divider">/</span></li>
 			<li class="active"><g:message code="groupMember.label" default="Group Member" /></li>
 		</ul>

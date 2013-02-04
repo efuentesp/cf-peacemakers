@@ -331,7 +331,6 @@ class SocialGroupController {
 		
 	}
 	
-	
 	def groupList() {
 		println "groupList: ${params}"
 		

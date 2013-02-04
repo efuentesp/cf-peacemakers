@@ -4,6 +4,7 @@
 			<tr>
 				<th class="span1"><g:message code="surveyAssigned.sequence.label" default="Sequence"/></th>
 				<th class="span8"><g:message code="survey.label" default="Survey"/></th>
+				<th class="span1"><g:message code="surveyAssigned.score.label" default="Score"/></th>
 				<th class="span2"><g:message code="surveyAssigned.enabled.label" default="Status"/></th>
 				<th></th>
 			</tr>
@@ -16,6 +17,7 @@
 			<tr>
 				<td>${surveyApplied.surveyAssigned.sequence}</td>
 				<td>${surveyApplied.surveyAssigned.survey.name}</td>
+				<td><g:formatNumber number="${surveyApplied.score}" type="number" maxFractionDigits="0" />%</td>
 				<td>
 					<g:if test="${surveyApplied.applied}"><span><g:message code="surveyAssigned.applied.true.label" default="Applied"/></span></g:if>
 					<g:else><span><g:message code="surveyAssigned.applied.false.label" default="Not Applied"/></span></g:else>

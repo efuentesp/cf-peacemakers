@@ -5,6 +5,7 @@
 				<th><g:message code="socialGroup.groupType.stage.label" default="Stage"/></th>
 				<th><g:message code="socialGroup.groupType.period.label" default="Period"/></th>
 				<th><g:message code="socialGroup.groupType.group.label" default="Group"/></th>
+				<th><g:message code="socialGroup.groupType.group.count.label" default="No. Students"/></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -20,6 +21,9 @@
 				</td>
 				<td>
 					${fieldValue(bean: socialGroupBean, field: "name")}
+				</td>
+				<td>
+					${socialGroupBean?.groupMembers.size()}
 				</td>			
 				<td class="link">
 	

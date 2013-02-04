@@ -14,6 +14,7 @@ class LogoutController {
 	}
 	
 	def student = {
+		println "student: ${params}"
 	    // Logout programmatically
 	    Authentication auth = SecurityContextHolder.context.authentication
 	    if (auth) {

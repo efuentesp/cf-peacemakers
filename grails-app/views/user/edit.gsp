@@ -1,13 +1,20 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<meta name="layout" content="main">
+		</sec:ifAllGranted>
+		<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+			<meta name="layout" content="schoolAdmin">
+		</sec:ifAllGranted>
 		<title><g:message code="user.edit.header" default="Edit School" /></title>
 	</head>
 	
 	<body>
 		<!-- Left Panel -->
-		<g:render template="leftPanel"/>
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<g:render template="leftPanel"/>
+		</sec:ifAllGranted>
 		
 		<!--  Content Panel -->
 		<div class="span9">

@@ -7,7 +7,7 @@ import com.peacemakers.service.SurveyService;
 
 import grails.plugins.springsecurity.Secured;
 
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_ADMIN', 'ROLE_ADMIN_SCHOOL'])
 class SurveyResultsController {
 	def SurveyService
 	def springSecurityService

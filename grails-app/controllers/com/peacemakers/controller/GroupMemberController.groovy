@@ -16,7 +16,7 @@ import grails.converters.JSON;
 import grails.plugins.springsecurity.Secured;
 import groovy.io.FileType;
 
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_ADMIN', 'ROLE_ADMIN_SCHOOL'])
 class GroupMemberController {
 	def springSecurityService
 	def SocialGroupService

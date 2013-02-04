@@ -68,7 +68,7 @@ class StudentController {
 		
 		def surveysApplied = []
 		surveysAssigned.each { s->
-			surveysApplied << [surveyAssigned: s, applied: SociometricTestGroupMemberService.isSurveyTaken(s, userGroupMember)]
+			surveysApplied << [surveyAssigned: s, applied: SociometricTestGroupMemberService.isSurveyTaken(s, userGroupMember), score: SociometricTestGroupMemberService.score(s, userGroupMember)]
 		}
 		
 		[	

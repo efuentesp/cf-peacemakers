@@ -30,10 +30,13 @@ class SurveyAssignedController {
 		
 		def surveyAssigned = SurveyAssigned.get(params.id)
 		
+		def surveyQuestions = SurveyQuestion.findAllBySurvey(surveyAssigned.survey)
+		
 		[	
 			user: userSigned,
 			groupMember: userGroupMember,
-			surveyAssigned: surveyAssigned
+			surveyAssigned: surveyAssigned,
+			surveyQuestions: surveyQuestions
 		]
 	}
 	

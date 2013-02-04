@@ -37,6 +37,7 @@ class UserController {
 		[roles: roles, users: userRoles?.user, selectedRole: role]
 	}
 	
+	@Secured(['ROLE_ADMIN', 'ROLE_ADMIN_SCHOOL'])
 	def listBySocialGroup() {
 		println "listBySocialGroup: ${params}"
 		
@@ -70,6 +71,7 @@ class UserController {
 		
 	}
 	
+	@Secured(['ROLE_ADMIN', 'ROLE_ADMIN_SCHOOL'])
 	def edit() {
 		println "edit: ${params}"
 		

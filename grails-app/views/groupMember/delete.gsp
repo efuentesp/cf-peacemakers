@@ -1,7 +1,12 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<meta name="layout" content="main">
+		</sec:ifAllGranted>
+		<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+			<meta name="layout" content="schoolAdmin">
+		</sec:ifAllGranted>
 		<title><g:message code="groupMember.delete.header" default="Delete Student" /></title>
 		<link rel="stylesheet" href="${resource(dir: 'fileupload/css', file: 'fileupload.css')}"> 
 	</head>
@@ -9,8 +14,13 @@
 	<body>
 
 		<ul class="breadcrumb">
-			<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${groupMemberBean?.socialGroup?.parent?.geo.id}&country=${groupMemberBean?.socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
-			<li><a href="${createLink(uri: "/socialGroup/groupList?school=${groupMemberBean?.socialGroup?.parent.id}&stage=${groupMemberBean?.socialGroup?.stage.id}&period=${groupMemberBean?.socialGroup?.period.id}&city=${groupMemberBean?.socialGroup?.parent?.geo.id}&country=${groupMemberBean?.socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			<sec:ifAllGranted roles="ROLE_ADMIN">
+				<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${groupMemberBean?.socialGroup?.parent?.geo.id}&country=${groupMemberBean?.socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
+				<li><a href="${createLink(uri: "/socialGroup/groupList?school=${groupMemberBean?.socialGroup?.parent.id}&stage=${groupMemberBean?.socialGroup?.stage.id}&period=${groupMemberBean?.socialGroup?.period.id}&city=${groupMemberBean?.socialGroup?.parent?.geo.id}&country=${groupMemberBean?.socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
+			<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+				<li><a href="${createLink(uri: "/schoolAdmin/groupList?school=${groupMemberBean?.socialGroup?.parent.id}&stage=${groupMemberBean?.socialGroup?.stage.id}&period=${groupMemberBean?.socialGroup?.period.id}&city=${groupMemberBean?.socialGroup?.parent?.geo.id}&country=${groupMemberBean?.socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
 			<li><a href="${createLink(uri: "/groupMember/list/${groupMemberBean?.socialGroup.id}")}"><g:message code="groupMember.list.header" default="Group Member" /></a> <span class="divider">/</span></li>
 			<li class="active"><g:message code="groupMember.label" default="Group Member" /></li>
 		</ul>

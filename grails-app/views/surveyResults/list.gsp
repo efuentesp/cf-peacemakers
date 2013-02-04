@@ -1,15 +1,25 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<sec:ifAllGranted roles="ROLE_ADMIN">
+			<meta name="layout" content="main">
+		</sec:ifAllGranted>
+		<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+			<meta name="layout" content="schoolAdmin">
+		</sec:ifAllGranted>
 		<title><g:message code="surveyResults.header" default="Surveys" /></title>
 	</head>
 	
 	<body>
 	
 		<ul class="breadcrumb">
-			<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${socialGroup?.parent?.geo.id}&country=${socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
-			<li><a href="${createLink(uri: "/socialGroup/groupList?school=${socialGroup?.parent.id}&stage=${socialGroup?.stage.id}&period=${socialGroup?.period.id}&city=${socialGroup?.parent?.geo.id}&country=${socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			<sec:ifAllGranted roles="ROLE_ADMIN">
+				<li><a href="${createLink(uri: "/socialGroup/schoolList?city=${socialGroup?.parent?.geo.id}&country=${socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.school.list.header" default="Schools" /></a> <span class="divider">/</span></li>
+				<li><a href="${createLink(uri: "/socialGroup/groupList?school=${socialGroup?.parent.id}&stage=${socialGroup?.stage.id}&period=${socialGroup?.period.id}&city=${socialGroup?.parent?.geo.id}&country=${socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
+			<sec:ifAllGranted roles="ROLE_ADMIN_SCHOOL">
+				<li><a href="${createLink(uri: "/schoolAdmin/groupList?school=${socialGroup?.parent.id}&stage=${socialGroup?.stage.id}&period=${socialGroup?.period.id}&city=${socialGroup?.parent?.geo.id}&country=${socialGroup?.parent?.geo?.parent.id}")}"><g:message code="socialGroup.group.list.header" default="Groups" /></a> <span class="divider">/</span></li>
+			</sec:ifAllGranted>
 			<li class="active"><g:message code="default.navbar.results" default="Sociometric Test Results" /></li>
 		</ul>
 		
