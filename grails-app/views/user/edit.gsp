@@ -38,40 +38,40 @@
 			<fieldset>
 				<g:form action="update" method="post" class="form-horizontal">
 				
-					<g:hiddenField name="user" value="${user.id}" />
+					<g:hiddenField name="user" value="${userToEdit.id}" />
 					<g:hiddenField name="role" value="${role}" />
 					<g:hiddenField name="socialGroup" value="${socialGroup}" />
 				
 					<div class="control-group">
 						<label class="control-label"><g:message code="user.username.label" default="User"/></label>
 						<div class="controls">
-							<span class="input-medium uneditable-input">${user.username}</span>
+							<span class="input-medium uneditable-input">${userToEdit.username}</span>
 						</div>
 					</div>
 					
 					<tb:controlGroup name="password"
-									bean="user"
+									bean="userToEdit"
 									labelMessage="${g.message(code:"user.password.label", default:"Password")}"
-									error="${hasErrors(bean:user, field:'password', 'error')}"
-									errors="${g.renderErrors(bean:user, field:'password', as:'list')}">
-						<g:field type="text" name="password" id="password" class="input-medium" value="${user.unencode}" autocomplete='off'/>
+									error="${hasErrors(bean:userToEdit, field:'password', 'error')}"
+									errors="${g.renderErrors(bean:userToEdit, field:'password', as:'list')}">
+						<g:field type="text" name="password" id="password" class="input-medium" value="${userToEdit.unencode}" autocomplete='off'/>
 					</tb:controlGroup>									
 					
 					<div class="control-group">
 						<label class="control-label"><g:message code="user.enabled.label" default="Status"/></label>
 						<div class="controls">
-							<g:if test="${user.username != 'admin'}">
+							<g:if test="${userToEdit.username != 'admin'}">
 								<label class="radio">
-									<input type="radio" name="userEnabled" id="enabled" value="true" <g:if test = "${user.enabled == true}"> checked </g:if>>
+									<input type="radio" name="userEnabled" id="enabled" value="true" <g:if test = "${userToEdit.enabled == true}"> checked </g:if>>
 									<g:message code="user.enabled.true.label" default="Enabled"/>
 								</label>							
 								<label class="radio">
-									<input type="radio" name="userEnabled" id="disabled" value="false" <g:if test = "${user.enabled == false}"> checked </g:if>>
+									<input type="radio" name="userEnabled" id="disabled" value="false" <g:if test = "${userToEdit.enabled == false}"> checked </g:if>>
 									<g:message code="user.enabled.false.label" default="Disabled"/>
 								</label>
 							</g:if>
 							<g:else>
-								<span class="input-medium uneditable-input"><g:message code="user.enabled.${user.enabled}.label" default="unknown"/></span>
+								<span class="input-medium uneditable-input"><g:message code="user.enabled.${userToEdit.enabled}.label" default="unknown"/></span>
 							</g:else>
 						</div>
 					</div>
@@ -81,16 +81,16 @@
 					<div class="control-group">
 						<label class="control-label"><g:message code="role.list.header" default="Roles"/></label>
 						<div class="controls">
-							<g:if test="${user.username != 'admin'}">
+							<g:if test="${userToEdit.username != 'admin'}">
 								<g:each in="${roles}" var="role">				
 									<label class="checkbox">
-										<input type="checkbox" name="roles" value="${role.authority}" <g:if test="${role.authority in user.getAuthorities().authority}">checked</g:if>>
+										<input type="checkbox" name="roles" value="${role.authority}" <g:if test="${role.authority in userToEdit.getAuthorities().authority}">checked</g:if>>
 										<g:message code="role.${role.authority}.label" default="Role Unknown"/>
 									</label>
 								</g:each>
 							</g:if>
 							<g:else>
-								<g:each in="${user.getAuthorities()}" var="role">
+								<g:each in="${userToEdit.getAuthorities()}" var="role">
 									<span class="input-medium uneditable-input"><g:message code="role.${role.authority}.label" default="Role Unknown"/></span>
 								</g:each>
 							</g:else>

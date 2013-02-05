@@ -30,7 +30,7 @@
 								<span class="add-on">
 									<i class="icon-user"></i>
 								</span>
-								<input type="text" name="j_username" value="" required="" id="username" class="input-medium">
+								<input type="text" name="j_username" value="" required="" id="username" class="input-large">
 								<!-- <input type="text" name="j_username" value="" required="" id="username" class="input-medium">  -->
 							</div>
 						</div>
@@ -43,7 +43,7 @@
 								<span class="add-on">
 									<i class="icon-lock"></i>
 								</span>
-								<input type="password" name="j_password" value="" required="" id="password" class="input-medium">
+								<input type="password" name="j_password" value="" required="" id="password" class="input-large">
 							</div>
 						</div>
 					</div>

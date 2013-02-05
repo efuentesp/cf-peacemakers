@@ -77,14 +77,15 @@ class UserController {
 		
 		def roles = Role.list()
 		
-		def user = User.get(params.user)
+		def user = User.get(springSecurityService.principal.id)
+		def userToEdit = User.get(params.user)
 		
 		def groupMember
 		if (params.groupMember) {
 			groupMember = GroupMember.get(params.groupMember)
 		}
 		
-		[roles: roles, user: user, role: params.role, socialGroup: params.socialGroup, groupMember: groupMember]
+		[roles: roles, user: user, userToEdit: userToEdit, role: params.role, socialGroup: params.socialGroup, groupMember: groupMember]
 	}
 	
 	def update() {
