@@ -8,6 +8,8 @@ import com.peacemakers.domain.GroupMember;
 import com.peacemakers.domain.Person;
 import com.peacemakers.domain.SocialGroup;
 import com.peacemakers.domain.SocialGroupType;
+import com.peacemakers.domain.SociometricTestResult;
+import com.peacemakers.domain.SurveyAnswer;
 import com.peacemakers.security.Role;
 import com.peacemakers.security.User;
 import com.peacemakers.security.UserRole;
@@ -20,6 +22,7 @@ import groovy.io.FileType;
 class GroupMemberController {
 	def springSecurityService
 	def SocialGroupService
+	def GroupMemberService
 	def antUtilsService
 
 	static allowedMethods = [save: "POST", update: "POST", show: "POST"]
@@ -51,7 +54,19 @@ class GroupMemberController {
 			socialGroup.id == socialGroupId
 		}
 		
-		[socialGroupSelected:socialGroup, groupMemberList:groupMembers, user:user]
+		def groupMemberList = []
+		groupMembers.each { member->
+			def sociometricTestResultFrom = SociometricTestResult.findAllByFromGroupMember(member)
+			def sociometricTestResultTo = SociometricTestResult.findAllByToGroupMember(member)
+			def surveyAnswer = SurveyAnswer.findAllByGroupMember(member)
+			def hasResults = false
+			if (sociometricTestResultFrom.size()>0 || sociometricTestResultTo.size()>0 || surveyAnswer.size()>0) {
+				hasResults = true
+			}
+			groupMemberList << [ id: member.id, groupMember: member, person: member.person, user: member.user, hasResults: hasResults ]
+		}
+		
+		[socialGroupSelected: socialGroup, groupMemberList: groupMemberList, user: user]
 	}
 	
 	def create() {
@@ -536,10 +551,22 @@ class GroupMemberController {
 	
 	def bulkDelete() {
 		println "bulkDelete: ${params}"
+
+		def membersToDelete = []
+		if (!params.delete.getClass().isArray()) {
+			membersToDelete << params.delete
+			//println "is a String: ${membersToDelete}"
+		} else {
+			params.delete.each { member ->
+				membersToDelete << member
+			}
+			//println ("is an Array: ${membersToDelete}")
+		}
 		
-		params.delete.each { memberId ->
-			//println memberId
-			
+		membersToDelete.each { memberId ->
+			def messages = GroupMemberService.delete(memberId)
+
+			/*			
 			def groupMember = GroupMember.get(memberId)
 			
 			def user = groupMember.user
@@ -574,6 +601,7 @@ class GroupMemberController {
 			catch (DataIntegrityViolationException e) {
 				flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
 			}
+			*/
 			
 		}
 		redirect(action: "list", id: params.socialGroup)
@@ -640,6 +668,6 @@ class GroupMemberController {
 		
 		render socialGroupTree as JSON
 	}
+}
 	
 
-}
