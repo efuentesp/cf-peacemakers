@@ -23,7 +23,12 @@
 					${fieldValue(bean: socialGroupBean, field: "name")}
 				</td>
 				<td>
-					${socialGroupBean?.groupMembers.size()}
+					<g:if test="${socialGroupBean?.groupMembers.size() > 0}">
+						<span class="badge badge-info">${socialGroupBean?.groupMembers.size()}</span>
+					</g:if>
+					<g:else>
+						<span class="badge">0</span>
+					</g:else>
 				</td>			
 				<td class="link">
 	

@@ -58,7 +58,12 @@ class StudentController {
 		
 		def sociometricTestsApplied = []
 		sociometricTests.each { s->
-			sociometricTestsApplied << [sociometricTest: s, applied: SociometricTestGroupMemberService.isSociometricTestTaken(s, userGroupMember)]
+			if (s.enabled) {
+				def isApplied = SociometricTestGroupMemberService.isSociometricTestTaken(s, userGroupMember)
+				if (!isApplied) {
+					sociometricTestsApplied << [sociometricTest: s, applied: isApplied]
+				}
+			}
 		}
 		
 		// Find Surveys assigned to the Social Group
@@ -68,7 +73,12 @@ class StudentController {
 		
 		def surveysApplied = []
 		surveysAssigned.each { s->
-			surveysApplied << [surveyAssigned: s, applied: SociometricTestGroupMemberService.isSurveyTaken(s, userGroupMember), score: SociometricTestGroupMemberService.score(s, userGroupMember)]
+			if (s.enabled) {
+				def isApplied = SociometricTestGroupMemberService.isSurveyTaken(s, userGroupMember)
+				if (!isApplied) {
+					surveysApplied << [surveyAssigned: s, applied: isApplied, score: SociometricTestGroupMemberService.score(s, userGroupMember)]
+				}
+			}
 		}
 		
 		[	

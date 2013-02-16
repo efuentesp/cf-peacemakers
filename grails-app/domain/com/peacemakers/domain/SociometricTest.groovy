@@ -18,4 +18,36 @@ class SociometricTest {
 		sociometricTestResults(nullable: true)
     }
 	
+	def countVotingGroupMembers() {
+		def c = SociometricTestResult.createCriteria() 
+		def resultsCount = c.get {
+		    projections {
+				eq("sociometricTest", this)
+		        countDistinct "fromGroupMember"
+		    }
+		}
+		return resultsCount
+	}
+	
+	def countGroupMembers() {
+		def c = GroupMember.createCriteria()
+		def resultsCount = c.get {
+			projections {
+				eq("socialGroup", this.socialGroup)
+				countDistinct "id"
+			}
+		}
+		return resultsCount
+	}
+	
+	def testBeginningDate() {
+		def c = SociometricTestResult.createCriteria() 
+		def minDate = c.get {
+		    projections {
+				eq("sociometricTest", this)
+		        min "testDate"
+		    }
+		}
+		return minDate
+	}
 }

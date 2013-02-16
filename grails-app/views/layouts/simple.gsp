@@ -75,7 +75,7 @@
 			<hr>
 			<span class="muted">
 				<footer class="footer">
-					<p>&copy; Copyright 2012 Peacemakers. All rights reserved.</p>
+					<p>&copy; Copyright 2013 Peacemakers. All rights reserved.</p>
 				</footer>
 			</span>
 			

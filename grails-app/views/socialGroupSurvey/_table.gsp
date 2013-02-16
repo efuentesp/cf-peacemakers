@@ -3,6 +3,9 @@
 		<tr>
 			<th><g:message code="surveyAssigned.sequence.label" default="Sequence"/></th>
 			<th><g:message code="survey.name.label" default="Survey Assigned"/></th>
+			<th><g:message code="surveyAssigned.countSurveyAppliedGroupMembers.label" default="Students with Survey answered"/></th>
+			<th><g:message code="surveyAssigned.countNonSurveyAppliedGroupMembers.label" default="Students without Survey answered"/></th>
+			<th><g:message code="surveyAssigned.surveyAnsweredDate.label" default="Survey answerd Date"/></th>			
 			<th><g:message code="surveyAssigned.enabled.label" default="Status"/></th>
 			<th></th>
 		</tr>
@@ -16,8 +19,11 @@
 			<td>${surveyAssigned.sequence}</td>
 			<td>
 				${surveyAssigned?.survey.name}
-				<span class="badge badge-info">${surveyAssigned?.answers.size()}</span>
+				<!-- <span class="badge badge-info">${surveyAssigned?.answers.size()}</span> -->
 			</td>
+			<td>${surveyAssigned.countSurveyAppliedGroupMembers()}</td>			
+			<td>${surveyAssigned.countGroupMembers() - surveyAssigned.countSurveyAppliedGroupMembers()}</td>
+			<td><g:formatDate date="${surveyAssigned.testBeginningDate()}" type="date" style="MEDIUM"/></td>			
 			<td>
 				<g:if test="${surveyAssigned.enabled}"><span class="label label-success"><g:message code="surveyAssigned.enabled.true.label" default="Active"/></span></g:if>
 				<g:else><span class="label label-important"><g:message code="surveyAssigned.enabled.false.label" default="Inactive"/></span></g:else>			

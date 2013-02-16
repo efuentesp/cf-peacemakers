@@ -3,6 +3,9 @@
 		<tr>
 			<th><g:message code="sociometricTest.sequence.label" default="Sequence"/></th>
 			<th><g:message code="sociometricTest.sociometricCriteria.label" default="Sociometric Criteria"/></th>
+			<th><g:message code="sociometricTest.sociometricCriteria.countVotingGroupmembers.label" default="Students with votes"/></th>
+			<th><g:message code="sociometricTest.sociometricCriteria.countNonVotingGroupmembers.label" default="Students without votes"/></th>
+			<th><g:message code="sociometricTest.sociometricCriteria.votingDate.label" default="Voting Date"/></th>
 			<th><g:message code="sociometricTest.status.label" default="Status"/></th>
 			<th></th>
 		</tr>
@@ -16,8 +19,11 @@
 			<td>${sociometricTest.sequence}</td>
 			<td>
 				<g:message code="${sociometricTest?.sociometricCriteria.code}" default="${sociometricTest?.sociometricCriteria.name}"/>
-				<span class="badge badge-info">${sociometricTest.sociometricTestResults.size()}</span>
+				<!-- <span class="badge badge-info">${sociometricTest.sociometricTestResults.size()}</span> -->
 			</td>
+			<td>${sociometricTest.countVotingGroupMembers()}</td>			
+			<td>${sociometricTest.countGroupMembers() - sociometricTest.countVotingGroupMembers()}</td>
+			<td><g:formatDate date="${sociometricTest.testBeginningDate()}" type="date" style="MEDIUM"/></td>
 			<td>
 				<g:if test="${sociometricTest.enabled}"><span class="label label-success"><g:message code="sociometricTest.enabled.true.label" default="Active"/></span></g:if>
 				<g:else><span class="label label-important"><g:message code="sociometricTest.enabled.false.label" default="Inactive"/></span></g:else>			

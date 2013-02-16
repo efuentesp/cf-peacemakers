@@ -37,7 +37,7 @@
 			<ul>
 			<g:each in="${surveys}" var="survey">
 				<li>
-					<g:message code="${survey.surveyAssigned.survey.code}" default="${survey.surveyAssigned.survey.name}"/> ${survey.surveyAssigned.id}
+					<g:message code="${survey.surveyAssigned.survey.name}" default="${survey.surveyAssigned.survey.name}"/> ${survey.surveyAssigned.id}
 					<ul>
 					<g:each in="${survey.surveyResults}" var="${result}">
 						<li>
@@ -53,11 +53,11 @@
 			<ul>
 			<g:each in="${questions}" var="question">
 				<li>
-					<g:message code="${question.surveyAssigned.survey.code}" default="${question.surveyAssigned.survey.name}"/> ${question.surveyAssigned.id}
+					<g:message code="${question.surveyAssigned.survey.name}" default="${question.surveyAssigned.survey.name}"/> ${question.surveyAssigned.id}
 					<ul>
 					<g:each in="${question.surveyResults}" var="${result}">
 						<li>
-							<g:message code="${result.question.code}" default="${result.question.description}"/> =
+							<g:message code="${result.question.description}" default="${result.question.description}"/> =
 							<g:formatNumber number="${result.percentage}" type="number" maxFractionDigits="2" roundingMode="HALF_DOWN" />%
 						</li>
 					</g:each>

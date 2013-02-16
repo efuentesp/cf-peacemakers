@@ -18,7 +18,9 @@
 			</div> <!-- page-header -->
 
 			<g:if test='${flash.message}'>
-				<div class='login_message'>${flash.message}</div>
+				<div class="alert alert-error">
+					<a class="close" data-dismiss="alert" href="#">×</a>${flash.message}
+				</div>
 			</g:if>
 	
 			<form action='${postUrl}' method='POST' id='loginForm' class='well form-vertical' autocomplete='off'>

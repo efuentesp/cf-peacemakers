@@ -22,6 +22,7 @@ import com.peacemakers.security.UserRole;
 @Secured(['ROLE_ADMIN'])
 class SocialGroupController {
 	def springSecurityService
+	def SchoolService
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -141,6 +142,25 @@ class SocialGroupController {
 
 		[countries: countries, schoolBean: school, geoBean:geo, city: geo.id, country: geo?.parent?.parent.id, user: user, action:'school']
 	}
+
+	/*
+	def schoolSave() {
+		println "schoolSave ${params}"
+		
+		def admin = [user: params.user, password: params.password]
+		def school = [name: params.schoolName, 
+					  groupCategory: params.groupCategory,
+					  street: params.schoolStreet,
+					  city: params.schoolCity,
+					  state: params.state,
+					  country: params.schoolCountry]
+		
+		def messages = SchoolService.create(school, admin)
+		
+		flash.message = message(code: 'default.created.message', args: [message(code: 'socialGroup.groupType.school.label', default: 'School'), school.id])
+		redirect(action: "schoolList", params: [city: geoBean.id, country: geoBean.parent.id])
+	}
+	*/
 	
 	def schoolSave() {
 		println "schoolSave ${params}"

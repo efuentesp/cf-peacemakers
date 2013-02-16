@@ -45,7 +45,7 @@
 					<div class="control-group">
 						<label class="control-label"><g:message code="user.username.label" default="User"/></label>
 						<div class="controls">
-							<span class="input-medium uneditable-input">${userToEdit.username}</span>
+							<span class="input-large uneditable-input">${userToEdit.username}</span>
 						</div>
 					</div>
 					
@@ -54,7 +54,7 @@
 									labelMessage="${g.message(code:"user.password.label", default:"Password")}"
 									error="${hasErrors(bean:userToEdit, field:'password', 'error')}"
 									errors="${g.renderErrors(bean:userToEdit, field:'password', as:'list')}">
-						<g:field type="text" name="password" id="password" class="input-medium" value="${userToEdit.unencode}" autocomplete='off'/>
+						<g:field type="text" name="password" id="password" class="input-large" value="${userToEdit.unencode}" autocomplete='off'/>
 					</tb:controlGroup>									
 					
 					<div class="control-group">

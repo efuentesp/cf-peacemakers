@@ -12,25 +12,25 @@
 		<tbody>
 	
 			<g:each in="${sociometricTestsApplied}" var="sociometricTestApplied">
-			<tr>
-				<td>${sociometricTestApplied.sociometricTest.sequence}</td>
-				<td>${sociometricTestApplied.sociometricTest.sociometricCriteria.name}</td>
-				<td>
-					<g:if test="${sociometricTestApplied.applied}"><span><g:message code="sociometricTest.applied.true.label" default="Applied"/></span></g:if>
-					<g:else><span><g:message code="sociometricTest.applied.false.label" default="Not Applied"/></span></g:else>
-				</td>
-	
-				<td class="link">
-					<div class="btn-toolbar" style="margin: 0;">
-						<g:if test="${!sociometricTestApplied.applied}">
-						<a href="${createLink(uri: "/student/list")}/${sociometricTestApplied.sociometricTest.id}" class="btn btn-primary">
-							<i class="icon-comment-alt icon-white"></i>
-							<g:message code="sociometricTest.button.apply.label" default="Apply"/>
-						</a>
-						</g:if>
-					</div>									
-				</td>
-			</tr>
+				<tr>
+					<td>${sociometricTestApplied.sociometricTest.sequence}</td>
+					<td>${sociometricTestApplied.sociometricTest.sociometricCriteria.name}</td>
+					<td>
+						<g:if test="${sociometricTestApplied.applied}"><span><g:message code="sociometricTest.applied.true.label" default="Applied"/></span></g:if>
+						<g:else><span><g:message code="sociometricTest.applied.false.label" default="Not Applied"/></span></g:else>
+					</td>
+		
+					<td class="link">
+						<div class="btn-toolbar" style="margin: 0;">
+							<g:if test="${!sociometricTestApplied.applied}">
+							<a href="${createLink(uri: "/student/list")}/${sociometricTestApplied.sociometricTest.id}" class="btn btn-primary">
+								<i class="icon-comment-alt icon-white"></i>
+								<g:message code="sociometricTest.button.apply.label" default="Apply"/>
+							</a>
+							</g:if>
+						</div>									
+					</td>
+				</tr>
 			</g:each>
 	
 		</tbody>

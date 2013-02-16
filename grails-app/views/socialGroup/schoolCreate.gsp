@@ -100,7 +100,7 @@
 
 							<tb:controlGroup name="state"
 											bean="schoolBean"
-											labelMessage="${g.message(code:"geography.geoType.state.label", default:"State")}"
+											labelMessage="${g.message(code:"geography.geoType.subdivision.label", default:"State")}"
 											error="${hasErrors(bean:schoolBean, field:'address?.street', 'error')}"
 											errors="${g.renderErrors(bean:schoolBean, field:'address.street', as:'list')}">
 								<g:select name="state" from="" disabled="false" class="input-medium"
@@ -130,7 +130,7 @@
 											labelMessage="${g.message(code:"user.username.label", default:"User id")}"
 											error="${hasErrors(bean:user, field:'user', 'error')}"
 											errors="${g.renderErrors(bean:user, field:'user', as:'list')}">
-								<g:field type="text" name="user" id="user" class="input-medium" value="" autocomplete='off'/>
+								<g:field type="text" name="user" id="user" class="input-large" value="" autocomplete='off'/>
 							</tb:controlGroup>
 							
 							<tb:controlGroup name="password"
@@ -138,7 +138,7 @@
 											labelMessage="${g.message(code:"user.password.label", default:"Password")}"
 											error="${hasErrors(bean:user, field:'password', 'error')}"
 											errors="${g.renderErrors(bean:user, field:'password', as:'list')}">
-								<g:field type="text" name="password" id="password" class="input-medium" value="" autocomplete='off'/>
+								<g:field type="text" name="password" id="password" class="input-large" value="" autocomplete='off'/>
 							</tb:controlGroup>
 							
 							<div class="form-actions">

@@ -341,87 +341,6 @@ class GroupMemberController {
 		}
 	}
 	
-	/*	
-	private def addBulkGroupMembers(userDir, socialGroup) {
-		
-		def i=0
-		
-		userDir.eachFileMatch(~/.*.(?:csv)/) { file ->
-			
-			println "File name: ${file}"
-			
-			def fileText = file.text.replaceAll(';', ',')
-			file.write(fileText)
-			
-			file.splitEachLine(",") { field ->
-				
-				i++
-
-				def firstName = field[0]
-				def firstSurname = field[1]
-				def secondSurname = field[2]
-				if (!secondSurname) {
-					def lastName = firstSurname.split(" ")
-					firstSurname = lastName[0]
-					if (lastName.size() > 1) {
-						secondSurname = lastName[1]
-					}
-				}
-				def gender = field[3]
-				def birthday = (field[4]) ? new Date().parse("yyyy-MM-dd", "${field[4]}") : null
-				def nationalIdNumber = field[5]
-				
-				println "GroupMember [${i}]:"
-				println "   First Name: ${firstName}"
-				println "   First Surname: ${firstSurname}"
-				println "   Second Surname: ${secondSurname}"
-				println "   Gender: ${gender}"
-				println "   Birthday: ${birthday}"
-								
-				switch (gender) {
-					case 'M':
-						gender = GenderType.MALE
-						break
-					case 'F':
-						gender = GenderType.FEMALE
-						break
-					default:
-						gender = null
-				}
-				
-				def person = new Person(nationalIdNumber: nationalIdNumber, firstName: firstName, firstSurname: firstSurname, secondSurname: secondSurname, birthday:birthday, gender:gender)
-				if (!person.save(flush: true)) {
-					person.errors.each {
-						println it
-					}
-				}
-				
-				def userName = createUserName(person)
-				
-				def imageTool = new ImageTool()
-				try{
-					imageTool.load("${userDir}/${i}.JPG")
-				}
-				catch (java.io.FileNotFoundException e) {
-					def webRootDir = servletContext.getRealPath("/")
-					imageTool.load("${webRootDir}/fileupload/img/unknown-person.jpg")
-				}
-				//imageTool.saveOriginal()
-				imageTool.thumbnail(180)
-				//groupMember.photo = imageTool.getBytes("JPEG")
-				
-				//def groupMemberPhoto = new File(userDir, "${i}.jpg")
-				def groupMember = new GroupMember(person:person, photo: imageTool.getBytes("JPEG"), user:userName)
-				
-				socialGroup.addToGroupMembers(groupMember).save(failOnError: true)
-				
-			}
-
-		}
-
-	}
-	*/
-	
 	def update() {
 		//println params
 		
@@ -509,6 +428,12 @@ class GroupMemberController {
 	}
 	
 	def remove() {
+		println "remove: ${params}"
+		def groupMember = GroupMember.get(params.id)
+		def messages = GroupMemberService.delete(params.id)
+
+		redirect(action: "list", id:groupMember?.socialGroup.id)
+/*		
 		def groupMember = GroupMember.get(params.id)
 		if (!groupMember) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'groupMember.label', default: 'GroupMember'), params.id])
@@ -547,6 +472,7 @@ class GroupMemberController {
 		catch (DataIntegrityViolationException e) {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), params.id])
 		}
+*/
 	}
 	
 	def bulkDelete() {
