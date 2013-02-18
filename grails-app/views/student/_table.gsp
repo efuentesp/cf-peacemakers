@@ -18,17 +18,19 @@
 							<div class="student-name">
 								<h4>${groupMemberBean.getFullName()}</h4>
 							</div>					
-							<div class="student-vote">
+							<div id="vote${groupMemberBean.id}" class="student-vote">
 								<g:each in="${sociometricCriteriaResponseList}" var="sociometricCriteriaResponse">
 									<label>
 										<input type="radio" name="vote.${groupMemberBean.id}" id="sociometricCriteriaResponse${sociometricCriteriaResponse.sequence}" value="${sociometricCriteriaResponse.id}">
 										<g:message code="${sociometricCriteriaResponse.question}" default="${sociometricCriteriaResponse.question}"/>
 									</label>								
 								</g:each>
+								<!-- 
 								<label>
 									<input type="radio" name="vote.${groupMemberBean.id}" id="sociometricCriteriaResponse0" value="0">
 									<g:message code="sociometriccriteria.question.default.name" default="None"/>
-								</label>								
+								</label>
+								-->								
 								<!-- 
 								<select name="vote.${groupMemberBean.id}">
 									<option value=""><g:message code="sociometriccriteria.question.default.name" default="-- Select one --"/></option>
@@ -38,7 +40,11 @@
 										</option>
 									</g:each>
 								</select>
-								-->						
+								-->
+								<a id="reset" class="btn btn-warning btn-mini" onclick="reset(${groupMemberBean.id})">
+									<i class="icon-remove icon-white"></i>
+									<g:message code="sociometriccriteria.button.reset.label" default="Reset"/>
+								</a>													
 							</div>
 						</div>
 					</li>
@@ -58,6 +64,11 @@
 	
 	<script type="text/javascript">
 	    $("input[type='radio']").change(function() {
+			finish();
+			//alert(this);
+	    });
+
+		function finish() {
 	        //console.log($("input[type='radio']:checked").val());
 	        //console.log($("input[type='radio']:checked"));
 	        var i = 0;
@@ -76,6 +87,13 @@
 		    } else {
 		    	$('#finish').attr("disabled", "disabled");;
 			    //console.log("NO se puede salir")
-			}
-	    });		
+			}			
+		}
+	    
+	    function reset(c) {
+		    //alert("Reset!" + c);
+		    $('#vote' + c + ' input[type="radio"]:checked').attr('checked', false);
+		    finish();
+		}
+	    // $('#vote1 input[type="radio"]:checked').attr('checked', false);
 	</script>

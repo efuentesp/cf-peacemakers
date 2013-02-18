@@ -40,9 +40,11 @@
 			<g:render template="action"/>
 			    	
 			<!-- Table -->
+			<!-- 
 			<div class="span1">
 				<export:formats formats="['pdf']" params="${params}"/>
 			</div>
+			-->
 			<g:render template="tableSocialGroup"/>
 		
 			<!-- Pagination --> 

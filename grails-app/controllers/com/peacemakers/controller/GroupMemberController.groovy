@@ -1,7 +1,11 @@
 package com.peacemakers.controller
 
+import java.nio.charset.Charset;
+
 import org.grails.plugins.imagetools.ImageTool;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import java.text.Normalizer;
 
 import com.peacemakers.domain.GenderType;
 import com.peacemakers.domain.GroupMember;
@@ -218,15 +222,38 @@ class GroupMemberController {
 			userDir = new File(webRootDir, "/zipFiles/${socialGroup.id}/")
 			userDir.mkdirs()
 			
+			def newFilename = csvUploadedFile.originalFilename.replaceAll(~/ /, "")
+			println "New filename: ${newFilename}"
+			
 			def uploadedCsvFile = new File(userDir, csvUploadedFile.originalFilename)
+			//uploadedCsvFile.renameTo(new File(userDir, newFilename))
 			csvUploadedFile.transferTo(uploadedCsvFile)
 			
-			def fileText = uploadedCsvFile.text.replaceAll(';', ',')
-			uploadedCsvFile.write(fileText)
+			//String oldFilename = "old.txt"
+			//String newFilename = "new.txt"
+			//new File(oldFilename).renameTo(new File(newFilename))
+			
+			//CharsetToolkit toolkit = new CharsetToolkit(uploadedCsvFile)
+			//Charset guessedCharset = toolkit.getDefaultCharset()
+			//println "CHARSET: ${guessedCharset}"
+			def command = """file -I """ + uploadedCsvFile
+			def proc = command.execute()
+			proc.waitFor()
+			println "return code: ${proc.exitValue()}"
+			println "stderr: ${proc.err.text}"
+			//println "stdout: ${proc.in.text}"
+			def stdout = "${proc.in.text}"
+			def out = stdout.split('=')
+			def charset = "${out[1].toUpperCase().trim()}"
+			println "Charset: ${charset}"
+			
+			//def fileText = uploadedCsvFile.getText('ISO-8859-1').replaceAll(';', ',')
+			def fileText = uploadedCsvFile.getText(charset).replaceAll(';', ',')
+			uploadedCsvFile.write(fileText, 'UTF-8')
 	
 			def i = 0
 			//uploadedCsvFile.eachCsvLine { tokens->
-			uploadedCsvFile.toCsvReader().eachLine { tokens ->
+			uploadedCsvFile.toCsvReader(['charset':'UTF-8']).eachLine { tokens ->
 				if (tokens.size() >= 2 && tokens.size() <= 3 && tokens[0] != '' && tokens[1] != '') {
 					def firstName = '** Sin nombre **'
 					if (tokens[0] != '') {
@@ -570,17 +597,19 @@ class GroupMemberController {
 		def studentRole = Role.findByAuthority('ROLE_STUDENT') ?: new Role(authority: 'ROLE_STUDENT').save(failOnError: true)
 		
 		def firstName = person.firstName.split()
+		def firstSurname = person.firstSurname.split()
 		
 		//def userId = person.firstName.toLowerCase().replaceAll(~/ /, "") + person.id
 		def userId = firstName[0].toLowerCase().replaceAll(~/ /, "") + person.id
-		def password = person.firstSurname.toLowerCase().replaceAll(~/ /, "")
+		//def password = person.firstSurname.toLowerCase().replaceAll(~/ /, "")
+		def password = firstSurname[0].toLowerCase().replaceAll(~/ /, "")
 		
 		//println "   User: ${userId}"
 
-		def userName = User.findByUsername(userId) ?: new User(	username: userId,
+		def userName = User.findByUsername(userId) ?: new User(	username: removeAccents(userId),
 																enabled: true,
-																password: password,
-																unencode: password)
+																password: removeAccents(password),
+																unencode: removeAccents(password))
 																.save(failOnError: true)
 		if (!userName.authorities.contains(studentRole)) {
 			UserRole.create userName, studentRole, true
@@ -593,6 +622,11 @@ class GroupMemberController {
 		def socialGroupTree = SocialGroupService.getSocialGroupTree(0)
 		
 		render socialGroupTree as JSON
+	}
+	
+	private String removeAccents(String text) {
+		//return Normalizer.decompose(text, false, 0).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+		return Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
 	}
 }
 	

@@ -107,8 +107,8 @@
 				    
 					    $.ajax({
 					      async: false,
-					      url: "/cf-peacemakers/sociometricTestResults/piejson",
-					      //url: "/sociometricTestResults/piejson",
+					      //url: "/cf-peacemakers/sociometricTestResults/piejson",
+					      url: "/sociometricTestResults/piejson",
 					      data: { criteria: sociometricCriteriaId, group: socialGroupId, maxPercentage: maxPercentage },
 					      dataType:"json",
 					      success: function(data) {

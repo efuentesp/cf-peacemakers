@@ -6,8 +6,8 @@ var colorScheme = 'rbow2';
 var data;
 
 d3.select("#matrix").classed(colorScheme, true);
-d3.json("/cf-peacemakers/sociometricTestResults/matrix/" + $('#socialGroup').val(), matrix);
-//d3.json("/sociometricTestResults/matrix/" + $('#socialGroup').val(), matrix);
+//d3.json("/cf-peacemakers/sociometricTestResults/matrix/" + $('#socialGroup').val(), matrix);
+d3.json("/sociometricTestResults/matrix/" + $('#socialGroup').val(), matrix);
 
 // All, PC, Mobile control event listener
 $('input[name="type"]').change(function() {					
