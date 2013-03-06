@@ -47,7 +47,7 @@
 		<g:render template="tableSurvey"/>
 		
 		<!-- Finish -->
-    	<g:link controller="logout" action="student" class="btn btn-inverse">
+    	<g:link controller="logout" action="student" class="btn btn-large btn-inverse">
     		<i class="icon-off icon-white"></i>
     		<g:message code="default.button.finish.label" default="F I N I S H"/>
     	</g:link>	

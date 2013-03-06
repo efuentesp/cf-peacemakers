@@ -63,6 +63,8 @@
 			<fieldset>
 				<g:uploadForm action="update" method="post" class="form-horizontal">
 
+					<g:hiddenField name="unknownPhoto" value="no" />
+
 						<g:hiddenField name="socialGroup" value="${groupMemberBean?.socialGroup.id}" />
 						
 						<g:hiddenField name="id" value="${groupMemberBean.id}" />
@@ -74,8 +76,12 @@
 						<div class="control-group">
 							<label class="control-label"><g:message code="groupMember.person.photo.label" default="Photo"/></label>
 							<div class="controls">
-								<img class="photo" src="${createLink(controller:'GroupMember', action:'renderPhoto', id:groupMemberBean.id)}"/>
+								<img id="photo" class="photo" src="${createLink(controller:'GroupMember', action:'renderPhoto', id:groupMemberBean.id)}"/>
 								<input type="file" id="photoUpload" name="photoUpload" size="20" />
+								<a class="btn btn-small btn-danger" onclick="removePhoto();">
+									<i class="icon-remove icon-white"></i>
+									<g:message code="groupMember.button.removePhoto.label" default="Remove Photo"/>
+								</a>
 							</div>
 						</div>
 						
@@ -138,6 +144,12 @@
 					dayLabel: "-- Día --"
 				});
 			});
+
+			function removePhoto() {
+	            var src = '/cf-peacemakers/groupMember/renderPhoto/0';
+	            $('#photo').attr("src", src);
+	            $('#unknownPhoto').val("yes");
+			}
 	    </script>
     
 	</body>

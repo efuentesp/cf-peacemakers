@@ -60,7 +60,7 @@
 					-->
 		
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary">
+						<button type="submit" class="btn btn-large btn-primary">
 							<g:message code="springSecurity.login.button" default="Login"/>
 							<i class="icon-circle-arrow-right icon-white"></i>
 						</button>

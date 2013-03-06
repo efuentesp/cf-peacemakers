@@ -23,7 +23,7 @@
 					<td class="link">
 						<div class="btn-toolbar" style="margin: 0;">
 							<g:if test="${!sociometricTestApplied.applied}">
-							<a href="${createLink(uri: "/student/list")}/${sociometricTestApplied.sociometricTest.id}" class="btn btn-primary">
+							<a href="${createLink(uri: "/student/list")}/${sociometricTestApplied.sociometricTest.id}" class="btn btn-large btn-primary">
 								<i class="icon-comment-alt icon-white"></i>
 								<g:message code="sociometricTest.button.apply.label" default="Apply"/>
 							</a>

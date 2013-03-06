@@ -26,7 +26,7 @@
 				<td class="link">
 					<div class="btn-toolbar" style="margin: 0;">
 						<g:if test="${!surveyApplied.applied}">
-						<a href="${createLink(uri: "/surveyAssigned/list")}/${surveyApplied.surveyAssigned.id}" class="btn btn-primary">
+						<a href="${createLink(uri: "/surveyAssigned/list")}/${surveyApplied.surveyAssigned.id}" class="btn btn-large btn-primary">
 							<i class="icon-check icon-white"></i>
 							<g:message code="surveyAssigned.button.apply.label" default="Apply"/>
 						</a>

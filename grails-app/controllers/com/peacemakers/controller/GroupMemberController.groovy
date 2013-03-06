@@ -118,6 +118,10 @@ class GroupMemberController {
 		
 		def groupMember = GroupMember.get(params.id)
 		
+		// Unknown Photo
+		def webRootDir = servletContext.getRealPath("/")
+		def unknownPhoto = "${webRootDir}fileupload/img/unknown-person.jpg"
+		
 		[groupMemberBean:groupMember, user:user]
 	}
 	
@@ -244,7 +248,10 @@ class GroupMemberController {
 			//println "stdout: ${proc.in.text}"
 			def stdout = "${proc.in.text}"
 			def out = stdout.split('=')
-			def charset = "${out[1].toUpperCase().trim()}"
+			def charset = 'UTF-8'
+			if (out.size() > 1) {
+				charset = "${out[1].toUpperCase().trim()}"
+			}
 			println "Charset: ${charset}"
 			
 			//def fileText = uploadedCsvFile.getText('ISO-8859-1').replaceAll(';', ',')
@@ -369,7 +376,7 @@ class GroupMemberController {
 	}
 	
 	def update() {
-		//println params
+		//println "Update(): ${params}"
 		
 		def photo, imageTool
 		
@@ -387,6 +394,14 @@ class GroupMemberController {
 				flash.message = "Photo must be one of: ${okcontents}"
 				render(view:'edit')
 				return;
+			}
+		} else {
+			if (params.unknownPhoto == 'yes') {
+				//println "Load Unknown Photo!!"
+				imageTool = new ImageTool()
+				def webRootDir = servletContext.getRealPath("/")
+				imageTool.load("${webRootDir}/fileupload/img/unknown-person.jpg")
+				imageTool.thumbnail(180)
 			}
 		}
 		
@@ -438,11 +453,11 @@ class GroupMemberController {
 			}
 		}
 
-		if (photo) {
+		if (photo || params.unknownPhoto == 'yes') {
 			groupMember.photo = imageTool.getBytes("JPEG")
 			//groupMember.photo = photo.getBytes()
 			//groupMember.photoType = photo.getContentType()
-			log.info("File uploaded: " + groupMember.photoType)
+			//log.info("File uploaded: " + groupMember.photoType)
 		}
 		
 		if (!groupMember.save(flush: true)) {
@@ -562,9 +577,18 @@ class GroupMemberController {
 	
 	
 	def renderPhoto() {
+		// Unknown Photo
+		def imageTool = new ImageTool()
+		def webRootDir = servletContext.getRealPath("/")
+		imageTool.load("${webRootDir}/fileupload/img/unknown-person.jpg")
+		imageTool.thumbnail(180)
+		
 		def groupMemberPhoto = GroupMember.get(params.id)
 		if (!groupMemberPhoto || !groupMemberPhoto.photo || !groupMemberPhoto.photoType) {
-			response.sendError(404)
+			//response.sendError(404)
+			response.contentType = 'image/jpeg'
+			response.outputStream << imageTool.getBytes("JPEG")
+			response.outputStream.flush()
 			return;
 		}
 		response.setContentType(groupMemberPhoto.photoType)

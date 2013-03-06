@@ -64,9 +64,20 @@
 						<br>
 					</div>
 					<p style="text-align: center;">
-						<a class="scroll btn btn-primary btn-large" href="${createLink(uri: "/student")}"><g:message code="home.button.label" default="Login"/></a>
+						<a class="scroll btn btn-primary btn-large" href="javascript:openNewWindow()"><g:message code="home.button.label" default="Login"/></a>
 					</p>
 				</div>
+				
+				<script language="JavaScript">
+					 <!-- hide
+					 function openNewWindow() {
+						 popupWin = window.open('/cf-peacemakers/student',
+						 'open_window',
+						 'left=0, top=0')
+					 }
+					 // done hiding -->
+				 </script>
+				
 			</div>			
 		</div>
 
